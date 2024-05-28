@@ -1,13 +1,15 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:app_medicine/model/role.dart';
+import 'package:app_medicine/model/user.dart';
 import 'package:app_medicine/screens/auth/signup.dart';
 import 'package:app_medicine/screens/doctor_home.dart';
-import 'package:app_medicine/screens/home.dart';
-import 'package:app_medicine/tabs/ScheduleTab.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:app_medicine/service/auth_service.dart';
+import 'package:app_medicine/widgets/error_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
 
-import '../../model/users.dart';
-import '../../sql_lite/sql_lite.dart';
+import '../home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,9 +17,6 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
-
-enum userJob {doctor,admin,painter}
-
 
 class _LoginScreenState extends State<LoginScreen> {
 
@@ -30,37 +29,44 @@ class _LoginScreenState extends State<LoginScreen> {
   //Here is our bool variable
   bool isLoginTrue = false;
 
-  final db = DatabaseHelper();
+  final authService = AuthService();
 
-  //Now we should call this function in login button
-  login() async {
-    var response = await db
-        .login(Users(usrName: username.text, usrPassword: password.text));
-    if (response == true) {
-      //If login is correct, then goto notes
-      if (!mounted) return;
-      // if response.role == userJob.painter {
-      //
-      // } else if response.role == userJob.doctor  {
-      //
-      // } else if response.role == userJob.admin {
-      //
-      // }
-      if (username.text == "doctor") {
-        Navigator.pushReplacement(
-            // context, MaterialPageRoute(builder: (context) => const ScheduleTab(statusSchedule: "")));
-            context, MaterialPageRoute(builder: (context) => const DoctorHome()));
-      } else {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const Home()));
+  Future login() async {
+    var user = User();
+    user.email = username.text;
+    user.password = password.text;
+    var result = await authService.signIn(user);
+    if (result.statusCode == HttpStatus.ok) {
+      final Map<String, dynamic> resultData = jsonDecode(result.body);
+      // Luu Token
+      // Chia quyen
+      user = User();
+      var dataUser = jsonDecode(jsonEncode(resultData['user']));
+      user.email = dataUser['email'];
+      user.role = RoleExtension.fromString(dataUser['role']);
+      user.lastname = dataUser['lastname'];
+      user.firstname = dataUser['firstname'];
+      if (user.role == Role.ADMIN) {
+        print("Dang phat trien");
+      } else if (user.role == Role.USER) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Home()));
+      } else if (user.role == Role.DOCTOR) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DoctorHome()));
       }
-
-
+    } else if (result.statusCode == HttpStatus.unauthorized) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ErrorAlert(errorMessage: "Sai mail or sai mk");
+        },
+      );
     } else {
-      //If not, true the bool value to show error message
-      setState(() {
-        isLoginTrue = true;
-      });
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return ErrorAlert(errorMessage: result.body);
+        },
+      );
     }
   }
 

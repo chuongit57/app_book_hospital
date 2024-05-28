@@ -1,4 +1,5 @@
 import 'package:app_medicine/model/prescription.dart';
+import 'package:app_medicine/model/prescription.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import "package:latlong2/latlong.dart" as latLng;
@@ -10,6 +11,46 @@ final List<Prescription> defaultPrescription = [
   Prescription(prescriptionId: "2", name: "Bện sốt", prescription: 'c, d'),
   Prescription(prescriptionId: "3", name: "Dị ứng", prescription: 't,y'),
 ];
+
+
+
+class PrescriptionItem extends StatelessWidget {
+  final Prescription prescription;
+
+  const PrescriptionItem({
+    Key? key,
+    required this.prescription,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // return Container(
+    //   height: 50,
+    //   child: Center(child: TextButton(prescription.name)),
+    // );
+    return TextButton(
+      onPressed: () => showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('AlertDialog Title'),
+          content: const Text('AlertDialog description'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      ),
+      child: const Text('Show Dialog'),
+    );
+  }
+}
+
 
 class PrescriptionDetail extends StatelessWidget {
   PrescriptionDetail({Key? key}) : super(key: key);
@@ -39,7 +80,7 @@ class PrescriptionDetail extends StatelessWidget {
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: 'Enter your search query',
+                      hintText: 'Nhập tên bệnh',
                     ),
                     onSubmitted: (_) => _submitSearch(),
                   ),
@@ -55,14 +96,14 @@ class PrescriptionDetail extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0), // Hình dạng nút
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0), // Kích thước nút
+                      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0), // Kích thước nút
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.search), // Biểu tượng tìm kiếm
-                        SizedBox(width: 8.0), // Khoảng cách giữa biểu tượng và văn bản
-                        Text('Search'), // Văn bản của nút
+                        SizedBox(width: 0.0), // Khoảng cách giữa biểu tượng và văn bản
+                        Text('Tìm kiếm'), // Văn bản của nút
                       ],
                     ),
                   ),
@@ -72,24 +113,7 @@ class PrescriptionDetail extends StatelessWidget {
             Expanded(flex:1,
               child:  ListView(
               padding: const EdgeInsets.all(8),
-              children: <Widget>[
-                Container(
-                  height: 50,
-
-                  child: const Center(child: Text('Entry A')),
-                ),
-                Container(
-                  height: 50,
-
-                  child: const Center(child: Text('Entry B')),
-                ),
-                Container(
-                  height: 50,
-
-                  child: const Center(child: Text('Entry C')),
-                ),
-
-              ],
+              children: defaultPrescription.map((e) => PrescriptionItem(prescription: e)).toList()
             ),)
           ],
         ),

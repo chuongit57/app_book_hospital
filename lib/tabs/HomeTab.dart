@@ -1,32 +1,18 @@
 import 'dart:ui';
 
+import 'package:app_medicine/data_fake/data_doctor.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 
+import '../model/doctors.dart';
+import '../model/khoa.dart';
 import '../styles/colors.dart';
 import '../styles/styles.dart';
 
 List<Map> doctors = [
-  {
-    'img': 'lib/assets/doctor2.png',
-    'doctorName': 'Mai Thanh Nam',
-    'doctorTitle': 'Bác sĩ tim mạch'
-  },
-  {
-    'img': 'lib/assets/doctor2.png',
-    'doctorName': 'Nguyễn Lê Lâm',
-    'doctorTitle': 'Bác sĩ thần kinh'
-  },
-  {
-    'img': 'lib/assets/doctor2.png',
-    'doctorName': 'Thạch Xuân Hoàng',
-    'doctorTitle': 'Bác sĩ nha khoa'
-  },
-  {
-    'img': 'lib/assets/doctor2.png',
-    'doctorName': 'Hồ Huy',
-    'doctorTitle': 'Bác sĩ da liễu'
-  }
+  {'img': 'lib/assets/doctor2.png', 'doctorName': 'Mai Thanh Nam', 'doctorTitle': 'Bác sĩ tim mạch'},
+  {'img': 'lib/assets/doctor2.png', 'doctorName': 'Nguyễn Lê Lâm', 'doctorTitle': 'Bác sĩ thần kinh'},
+  {'img': 'lib/assets/doctor2.png', 'doctorName': 'Thạch Xuân Hoàng', 'doctorTitle': 'Bác sĩ nha khoa'},
+  {'img': 'lib/assets/doctor2.png', 'doctorName': 'Hồ Huy', 'doctorTitle': 'Bác sĩ da liễu'}
 ];
 
 List<Map> categories = [
@@ -36,13 +22,25 @@ List<Map> categories = [
   {'icon': Icons.local_hospital, 'text': 'Bệnh viện'},
 ];
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
   final void Function() onPressedScheduleCard;
-
-  const HomeTab({
+  HomeTab({
     Key? key,
     required this.onPressedScheduleCard,
   }) : super(key: key);
+
+  @override
+  State<HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
+  List<Doctors> docters = [];
+
+  Future<List<Doctors>> getBacsihangdau() async {
+    await Future.delayed(Duration(seconds: 5));
+    docters = generateDoctorList();
+    return docters;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +81,7 @@ class HomeTab extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onPressed: () => {onPressedScheduleCard()},
+                  onPressed: () => {widget.onPressedScheduleCard()},
                 )
               ],
             ),
@@ -91,7 +89,7 @@ class HomeTab extends StatelessWidget {
               height: 20,
             ),
             AppointmentCard(
-              onTap: onPressedScheduleCard,
+              onTap: widget.onPressedScheduleCard,
             ),
             SizedBox(
               height: 20,
@@ -106,12 +104,40 @@ class HomeTab extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            for (var doctor in doctors)
-              TopDoctorCard(
-                img: doctor['img'],
-                doctorName: doctor['doctorName'],
-                doctorTitle: doctor['doctorTitle'],
-              )
+
+            FutureBuilder<List<Doctors>>(
+              future: getBacsihangdau(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // While the data is loading, display a loading indicator
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  // If there's an error while fetching data, display an error message
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  // If no data is returned, display a message
+                  return Center(child: Text('No data found'));
+                } else {
+                  // If the data is loaded successfully, display the list of doctors
+                  // If the data is loaded successfully, display the list of doctors
+                  List<Doctors> doctorss = snapshot.data!;
+                  print("doctors");
+                  print(doctorss);
+                  return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: doctorss.length,
+                    itemBuilder: (context, index) {
+                      var doctor = doctorss[index];
+                      return ListTile(
+                        title: Text(doctor.name),
+                        subtitle: Text(doctor.khoa.name),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),
@@ -122,12 +148,12 @@ class HomeTab extends StatelessWidget {
 class TopDoctorCard extends StatelessWidget {
   String img;
   String doctorName;
-  String doctorTitle;
+  String doctorKhoa;
 
   TopDoctorCard({
     required this.img,
     required this.doctorName,
-    required this.doctorTitle,
+    required this.doctorKhoa,
   });
 
   @override
@@ -171,7 +197,7 @@ class TopDoctorCard extends StatelessWidget {
                   height: 5,
                 ),
                 Text(
-                  doctorTitle,
+                  doctorKhoa,
                   style: TextStyle(
                     color: Color(MyColors.grey02),
                     fontSize: 12,
@@ -245,8 +271,7 @@ class AppointmentCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Nguyễn Lê Lâm',
-                                style: TextStyle(color: Colors.white)),
+                            Text('Nguyễn Lê Lâm', style: TextStyle(color: Colors.white)),
                             SizedBox(
                               height: 2,
                             ),
@@ -391,13 +416,9 @@ class CategoryIcon extends StatelessWidget {
             showDialog<String>(
               context: context,
               builder: (BuildContext context) => AlertDialog(
-                title: const Text('Gọi ngay cho chúng tôi nếu bạn cần',
-                    textAlign: TextAlign.center),
+                title: const Text('Gọi ngay cho chúng tôi nếu bạn cần', textAlign: TextAlign.center),
                 content: const Text('0901379115', textAlign: TextAlign.center),
-                contentTextStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.pink,
-                    fontSize: 22),
+                contentTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.pink, fontSize: 22),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.pop(context, 'OK'),
@@ -413,8 +434,7 @@ class CategoryIcon extends StatelessWidget {
               context: context,
               builder: (BuildContext context) => AlertDialog(
                 // title: const Text('Tính năng đang phát triển'),
-                content: const Text('Tính năng đang phát triển',
-                    textAlign: TextAlign.center),
+                content: const Text('Tính năng đang phát triển', textAlign: TextAlign.center),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.pop(context, 'OK'),
@@ -491,10 +511,7 @@ class SearchInput extends StatelessWidget {
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: 'Nhập tên thuốc bạn muốn tra cứu',
-                hintStyle: TextStyle(
-                    fontSize: 13,
-                    color: Color(MyColors.purple01),
-                    fontWeight: FontWeight.w700),
+                hintStyle: TextStyle(fontSize: 13, color: Color(MyColors.purple01), fontWeight: FontWeight.w700),
               ),
             ),
           ),

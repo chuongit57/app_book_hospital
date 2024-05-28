@@ -1,4 +1,4 @@
-import 'package:app_medicine/model/users.dart';
+import 'package:app_medicine/model/user.dart';
 import 'package:app_medicine/tabs/SettingTab.dart';
 import 'package:flutter/material.dart';
 

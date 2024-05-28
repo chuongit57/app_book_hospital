@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:app_medicine/model/role.dart';
+import 'package:app_medicine/service/auth_service.dart';
+import 'package:app_medicine/widgets/error_alert.dart';
 import 'package:flutter/material.dart';
 
-import '../../model/users.dart';
-import '../../sql_lite/sql_lite.dart';
+import '../../model/user.dart';
 import 'login.dart';
 
 class SignUp extends StatefulWidget {
@@ -12,6 +16,9 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  Role? _selectedRole = Role.ADMIN;
+  final _authService = AuthService();
+
   final username = TextEditingController();
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
@@ -146,15 +153,23 @@ class _SignUpState extends State<SignUp> {
                     width: MediaQuery.of(context).size.width * .9,
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.deepPurple),
                     child: TextButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (formKey.currentState!.validate()) {
-                            //Login method will be here
-
-                            final db = DatabaseHelper();
-                            db.signup(Users(usrName: username.text, usrPassword: password.text)).whenComplete(() {
-                              //After success user creation go to login screen
+                            User user = User();
+                            user.email = username.text;
+                            user.password = password.text;
+                            user.role = Role.USER;
+                            final result = await _authService.signUp(user);
+                            if (result.statusCode == HttpStatus.ok) {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
-                            });
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return ErrorAlert(errorMessage: result.body);
+                                },
+                              );
+                            }
                           }
                         },
                         child: const Text(
