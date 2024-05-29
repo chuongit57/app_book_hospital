@@ -1,3 +1,4 @@
+import 'package:app_medicine/screens/AppointmentBookingScreen.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/colors.dart';
@@ -36,7 +37,8 @@ List<Map> schedules = [
     'doctorTitle': 'Bác sĩ tim mạch',
     'reservedDate': 'Thứ 3, 14 tháng 5',
     'reservedTime': '08:00 - 11:00',
-    'status': FilterStatus.Upcoming
+    'status': FilterStatus.Upcoming,
+    'department': 'Khoa Nội',
   },
   {
     'img': 'lib/assets/doctor2.png',
@@ -44,7 +46,8 @@ List<Map> schedules = [
     'doctorTitle': 'Bác sĩ thần kinh',
     'reservedDate': 'Thứ 2, 13/5',
     'reservedTime': '07:00 - 09:00',
-    'status': FilterStatus.Complete
+    'status': FilterStatus.Complete,
+    'department': 'Khoa Thần Kinh',
   },
   {
     'img': 'lib/assets/doctor2.png',
@@ -52,7 +55,8 @@ List<Map> schedules = [
     'doctorTitle': 'Bác sĩ ngoại khoa',
     'reservedDate': 'Thứ 2, 13/5',
     'reservedTime': '11:00 - 14:00',
-    'status': FilterStatus.Upcoming
+    'status': FilterStatus.Upcoming,
+    'department': 'Khoa Ngoại',
   },
   {
     'img': 'lib/assets/doctor2.png',
@@ -60,7 +64,8 @@ List<Map> schedules = [
     'doctorTitle': 'Bác sĩ nha khoa',
     'reservedDate': 'Thứ 4, 15 tháng 5',
     'reservedTime': '11:00 - 12:00',
-    'status': FilterStatus.Upcoming
+    'status': FilterStatus.Upcoming,
+    'department': 'Khoa Nha Khoa',
   },
   {
     'img': 'lib/assets/doctor2.png',
@@ -68,7 +73,8 @@ List<Map> schedules = [
     'doctorTitle': 'Bác sĩ da liễu',
     'reservedDate': 'Thứ 2, 13/5',
     'reservedTime': '13:00 - 17:00',
-    'status': FilterStatus.Cancel
+    'status': FilterStatus.Cancel,
+    'department': 'Khoa Da Liễu',
   },
   {
     'img': 'lib/assets/doctor2.png',
@@ -76,13 +82,25 @@ List<Map> schedules = [
     'doctorTitle': 'Bác sĩ răng hàm mặt',
     'reservedDate': 'Thứ 4, 15 tháng 5',
     'reservedTime': '13:00 - 17:00',
-    'status': FilterStatus.Upcoming
+    'status': FilterStatus.Upcoming,
+    'department': 'Khoa Răng Hàm Mặt',
   },
 ];
 
 class _ScheduleTabState extends State<ScheduleTab> {
   FilterStatus status = FilterStatus.Upcoming;
   Alignment _alignment = Alignment.centerLeft;
+  String? _selectedDepartment;
+
+  final List<String> _departments = [
+    'Tất cả',
+    'Khoa Nội',
+    'Khoa Thần Kinh',
+    'Khoa Ngoại',
+    'Khoa Nha Khoa',
+    'Khoa Da Liễu',
+    'Khoa Răng Hàm Mặt',
+  ];
 
   @override
   void initState() {
@@ -96,7 +114,8 @@ class _ScheduleTabState extends State<ScheduleTab> {
   @override
   Widget build(BuildContext context) {
     List<Map> filteredSchedules = schedules.where((var schedule) {
-      return schedule['status'] == status;
+      return schedule['status'] == status &&
+          (_selectedDepartment == null || _selectedDepartment == 'Tất cả' || schedule['department'] == _selectedDepartment);
     }).toList();
 
     return Scaffold(
@@ -110,9 +129,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
               textAlign: TextAlign.center,
               style: kTitleStyle,
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             Stack(
               children: [
                 Container(
@@ -176,9 +193,24 @@ class _ScheduleTabState extends State<ScheduleTab> {
                 )
               ],
             ),
-            SizedBox(
-              height: 20,
+            SizedBox(height: 20),
+            DropdownButton<String>(
+              value: _selectedDepartment,
+              hint: Text('Chọn Khoa'),
+              isExpanded: true,
+              items: _departments.map((String department) {
+                return DropdownMenuItem<String>(
+                  value: department,
+                  child: Text(department),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedDepartment = newValue;
+                });
+              },
             ),
+            SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
                 itemCount: filteredSchedules.length,
@@ -188,8 +220,8 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   var textButton = filteredSchedules[index]['status'] == FilterStatus.Upcoming
                       ? 'Đặt lịch'
                       : filteredSchedules[index]['status'] == FilterStatus.Complete
-                          ? 'Hủy bỏ'
-                          : 'Xóa';
+                      ? 'Hủy bỏ'
+                      : 'Xóa';
                   return Card(
                     margin: !isLastElement ? EdgeInsets.only(bottom: 20) : EdgeInsets.zero,
                     child: Padding(
@@ -202,9 +234,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                               CircleAvatar(
                                 backgroundImage: AssetImage(_schedule['img']),
                               ),
-                              SizedBox(
-                                width: 10,
-                              ),
+                              SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -215,9 +245,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
+                                  SizedBox(height: 5),
                                   Text(
                                     _schedule['doctorTitle'],
                                     style: TextStyle(
@@ -230,13 +258,12 @@ class _ScheduleTabState extends State<ScheduleTab> {
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 15,
+                          SizedBox(height: 15),
+                          DateTimeCard(
+                            reservedDate: _schedule['reservedDate'],
+                            reservedTime: _schedule['reservedTime'],
                           ),
-                          DateTimeCard(),
-                          SizedBox(
-                            height: 15,
-                          ),
+                          SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -248,13 +275,20 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                   },
                                 ),
                               ),
-                              SizedBox(
-                                width: 20,
-                              ),
+                              SizedBox(width: 20),
                               Expanded(
                                 child: ElevatedButton(
                                   child: Text(textButton),
-                                  onPressed: () => {},
+                                  onPressed: () {
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AppointmentBookingScreen(),
+                                      ),
+                                    );
+                                  // Navigator.pushNamed(context, '/AppointmentBooking', arguments: filteredSchedules[index]);
+                                  },
                                 ),
                               )
                             ],
@@ -265,7 +299,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   );
                 },
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -274,8 +308,13 @@ class _ScheduleTabState extends State<ScheduleTab> {
 }
 
 class DateTimeCard extends StatelessWidget {
+  final String reservedDate;
+  final String reservedTime;
+
   const DateTimeCard({
     Key? key,
+    required this.reservedDate,
+    required this.reservedTime,
   }) : super(key: key);
 
   @override
@@ -298,11 +337,9 @@ class DateTimeCard extends StatelessWidget {
                 color: Color(MyColors.primary),
                 size: 15,
               ),
-              SizedBox(
-                width: 5,
-              ),
+              SizedBox(width: 5),
               Text(
-                'Thứ hai, 13/5',
+                reservedDate,
                 style: TextStyle(
                   fontSize: 15,
                   color: Color(MyColors.primary),
@@ -318,18 +355,16 @@ class DateTimeCard extends StatelessWidget {
                 color: Color(MyColors.primary),
                 size: 17,
               ),
-              SizedBox(
-                width: 3,
-              ),
+              SizedBox(width: 3),
               Text(
-                '11:00 ~ 12:10',
+                reservedTime,
                 style: TextStyle(
                   color: Color(MyColors.primary),
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

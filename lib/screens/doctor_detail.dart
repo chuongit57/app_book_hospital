@@ -1,3 +1,4 @@
+import 'package:app_medicine/screens/AppointmentBookingScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import "package:latlong2/latlong.dart" as latLng;
@@ -101,7 +102,14 @@ class DetailBody extends StatelessWidget {
               ),
             ),
             child: Text('Đặt lịch hẹn'),
-            onPressed: () => {},
+            onPressed: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AppointmentBookingScreen(),
+                ),
+              ),
+            },
           )
         ],
       ),
@@ -119,9 +127,7 @@ class DoctorLocation extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: 200,
-      child: ClipRRect(
-          borderRadius: BorderRadius.circular(20)
-      ),
+      child: ClipRRect(borderRadius: BorderRadius.circular(20)),
     );
   }
 }
@@ -157,6 +163,7 @@ class DoctorInfo extends StatelessWidget {
 class AboutDoctor extends StatelessWidget {
   final String title;
   final String desc;
+
   const AboutDoctor({
     Key? key,
     required this.title,
@@ -241,9 +248,7 @@ class DetailDoctorCard extends StatelessWidget {
                   children: [
                     Text(
                       'Mai Thanh Nam',
-                      style: TextStyle(
-                          color: Color(MyColors.header01),
-                          fontWeight: FontWeight.w700),
+                      style: TextStyle(color: Color(MyColors.header01), fontWeight: FontWeight.w700),
                     ),
                     SizedBox(
                       height: 10,

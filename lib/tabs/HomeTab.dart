@@ -1,10 +1,7 @@
 import 'dart:ui';
-
 import 'package:app_medicine/data_fake/data_doctor.dart';
 import 'package:flutter/material.dart';
-
 import '../model/doctors.dart';
-import '../model/khoa.dart';
 import '../styles/colors.dart';
 import '../styles/styles.dart';
 
@@ -24,6 +21,7 @@ List<Map> categories = [
 
 class HomeTab extends StatefulWidget {
   final void Function() onPressedScheduleCard;
+
   HomeTab({
     Key? key,
     required this.onPressedScheduleCard,
@@ -53,15 +51,10 @@ class _HomeTabState extends State<HomeTab> {
             SizedBox(
               height: 20,
             ),
-            // UserIntro(),
-            SizedBox(
-              height: 10,
-            ),
             SearchInput(),
             SizedBox(
               height: 20,
             ),
-
             CategoryIcons(),
             SizedBox(
               height: 20,
@@ -94,17 +87,18 @@ class _HomeTabState extends State<HomeTab> {
             SizedBox(
               height: 20,
             ),
-            Text(
-              'Bác sĩ hàng đầu',
-              style: TextStyle(
-                color: Color(MyColors.header01),
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Bác sĩ hàng đầu',
+                  style: kTitleStyle,
+                ),
+              ],
             ),
             SizedBox(
               height: 20,
             ),
-
             FutureBuilder<List<Doctors>>(
               future: getBacsihangdau(),
               builder: (context, snapshot) {
@@ -119,19 +113,17 @@ class _HomeTabState extends State<HomeTab> {
                   return Center(child: Text('No data found'));
                 } else {
                   // If the data is loaded successfully, display the list of doctors
-                  // If the data is loaded successfully, display the list of doctors
                   List<Doctors> doctorss = snapshot.data!;
-                  print("doctors");
-                  print(doctorss);
                   return ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemCount: doctorss.length,
                     itemBuilder: (context, index) {
                       var doctor = doctorss[index];
-                      return ListTile(
-                        title: Text(doctor.name),
-                        subtitle: Text(doctor.khoa.name),
+                      return TopDoctorCard(
+                        img: 'lib/assets/doctor2.png', // Replace with actual image path
+                        doctorName: doctor.name,
+                        doctorKhoa: doctor.khoa.name,
                       );
                     },
                   );
@@ -146,9 +138,9 @@ class _HomeTabState extends State<HomeTab> {
 }
 
 class TopDoctorCard extends StatelessWidget {
-  String img;
-  String doctorName;
-  String doctorKhoa;
+  final String img;
+  final String doctorName;
+  final String doctorKhoa;
 
   TopDoctorCard({
     required this.img,
@@ -158,54 +150,59 @@ class TopDoctorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Color(MyColors.primary),
+        borderRadius: BorderRadius.circular(10),
+      ),
       margin: EdgeInsets.only(bottom: 20),
-      child: InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, '/detail', arguments: {
-            'img': 'lib/assets/doctor2.png',
-            'doctorName': 'Mai Thanh Nam',
-            'doctorTitle': 'Bác sĩ tim mạch',
-            'reservedDate': 'Thứ 3, 14 tháng 5',
-            'reservedTime': '08:00 - 11:00',
-            'status': "Hoàn thành"
-          });
-        },
-        child: Row(
-          children: [
-            Container(
-              color: Color(MyColors.grey01),
-              child: Image(
-                width: 100,
-                image: AssetImage(img),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, '/detail', arguments: {
+              'img': img,
+              'doctorName': doctorName,
+              'doctorTitle': doctorKhoa,
+              'reservedDate': 'Thứ 3, 14 tháng 5',
+              'reservedTime': '08:00 - 11:00',
+              'status': "Hoàn thành"
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
               children: [
-                Text(
-                  doctorName,
-                  style: TextStyle(
-                    color: Color(MyColors.header01),
-                    fontWeight: FontWeight.w700,
-                  ),
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage(img),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          doctorName,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        SizedBox(
+                          height: 2,
+                        ),
+                        Text(
+                          doctorKhoa,
+                          style: TextStyle(color: Color(MyColors.text01)),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  doctorKhoa,
-                  style: TextStyle(
-                    color: Color(MyColors.grey02),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
+                  height: 20,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -223,10 +220,10 @@ class TopDoctorCard extends StatelessWidget {
                       style: TextStyle(color: Color(MyColors.grey02)),
                     )
                   ],
-                )
+                ),
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
     );
@@ -411,39 +408,41 @@ class CategoryIcon extends StatelessWidget {
         print(text),
         if (text == 'Đơn thuốc')
           {Navigator.pushNamed(context, '/prescription')}
+        else if(text == 'Tư vấn')
+          {Navigator.pushNamed(context, '/advide')}
         else if (text == 'Gọi xe')
-          {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                title: const Text('Gọi ngay cho chúng tôi nếu bạn cần', textAlign: TextAlign.center),
-                content: const Text('0901379115', textAlign: TextAlign.center),
-                contentTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.pink, fontSize: 22),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
+            {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Gọi ngay cho chúng tôi nếu bạn cần', textAlign: TextAlign.center),
+                  content: const Text('0901379115', textAlign: TextAlign.center),
+                  contentTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.pink, fontSize: 22),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          }
-        else
-          {
-            showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                // title: const Text('Tính năng đang phát triển'),
-                content: const Text('Tính năng đang phát triển', textAlign: TextAlign.center),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
-                  ),
-                ],
+            }
+          else
+            {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  // title: const Text('Tính năng đang phát triển'),
+                  content: const Text('Tính năng đang phát triển', textAlign: TextAlign.center),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          }
+            }
       },
       child: Padding(
         padding: const EdgeInsets.all(4.0),
@@ -510,7 +509,7 @@ class SearchInput extends StatelessWidget {
             child: TextField(
               decoration: InputDecoration(
                 border: InputBorder.none,
-                hintText: 'Nhập tên thuốc bạn muốn tra cứu',
+                hintText: 'Nhập tên bác sĩ bạn muốn tìm kiếm',
                 hintStyle: TextStyle(fontSize: 13, color: Color(MyColors.purple01), fontWeight: FontWeight.w700),
               ),
             ),

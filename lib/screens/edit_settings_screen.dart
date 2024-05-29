@@ -1,4 +1,3 @@
-
 import 'package:app_medicine/widgets/edit_item.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
@@ -11,19 +10,28 @@ class EditSettingTab extends StatefulWidget {
 }
 
 class _EditSettingTabState extends State<EditSettingTab> {
-  String gender = "man";
+  String? gender = "nam";
+  String? bloodType;
+  String? mediaHistory;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.lightBlue,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
           icon: const Icon(Ionicons.chevron_back_outline),
         ),
-        leadingWidth: 80,
+        title: const Text(
+          'Chỉnh sửa hồ sơ',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
@@ -34,10 +42,10 @@ class _EditSettingTabState extends State<EditSettingTab> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
-                fixedSize: Size(60, 50),
+                fixedSize: const Size(60, 50),
                 elevation: 3,
               ),
-              icon: Icon(Ionicons.checkmark, color: Colors.white),
+              icon: const Icon(Ionicons.checkmark, color: Colors.white),
             ),
           ),
         ],
@@ -50,7 +58,7 @@ class _EditSettingTabState extends State<EditSettingTab> {
             children: [
               Center(
                 child: const Text(
-                  "Tài khoản",
+                  "Hồ sơ bệnh",
                   style: TextStyle(
                     fontSize: 36,
                     color: Colors.lightBlue,
@@ -58,65 +66,163 @@ class _EditSettingTabState extends State<EditSettingTab> {
                   ),
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               const EditItem(
                 title: "Tên",
-                widget: TextField(),
-              ),
-              const SizedBox(height: 40),
-              EditItem(
-                title: "Giới tính",
-                widget: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          gender = "nam";
-                        });
-                      },
-                      style: IconButton.styleFrom(
-                        backgroundColor: gender == "nam"
-                            ? Colors.deepPurple
-                            : Colors.grey.shade200,
-                        fixedSize: const Size(50, 50),
-                      ),
-                      icon: Icon(
-                        Ionicons.male,
-                        color: gender == "nam" ? Colors.white : Colors.black,
-                        size: 18,
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          gender = "nữ";
-                        });
-                      },
-                      style: IconButton.styleFrom(
-                        backgroundColor: gender == "nữ"
-                            ? Colors.deepPurple
-                            : Colors.grey.shade200,
-                        fixedSize: const Size(50, 50),
-                      ),
-                      icon: Icon(
-                        Ionicons.female,
-                        color: gender == "nữ" ? Colors.white : Colors.black,
-                        size: 18,
-                      ),
-                    )
-                  ],
+                widget: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Nhập tên của bạn',
+                  ),
                 ),
               ),
-              const SizedBox(height: 40),
-              const EditItem(
-                widget: TextField(),
-                title: "Số điện thoại",
+              const SizedBox(height: 20),
+              EditItem(
+                title: "Giới tính",
+                widget: DropdownButtonFormField<String>(
+                  value: gender,
+                  hint: const Text('Chọn giới tính'),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'nam',
+                      child: Text('Nam'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'nữ',
+                      child: Text('Nữ'),
+                    ),
+                  ],
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      gender = newValue;
+                    });
+                  },
+                ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               const EditItem(
-                widget: TextField(),
+                title: "Năm sinh",
+                widget: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Nhập năm sinh của bạn',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const EditItem(
+                title: "Số điện thoại",
+                widget: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Nhập số điện thoại của bạn',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const EditItem(
                 title: "Địa chỉ",
+                widget: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Nhập địa chỉ của bạn',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const EditItem(
+                title: "Chiều cao",
+                widget: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Nhập chiều cao của bạn',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const EditItem(
+                title: "Cân nặng",
+                widget: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Nhập cân nặng của bạn',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              EditItem(
+                title: "Nhóm máu",
+                widget: DropdownButtonFormField<String>(
+                  value: bloodType,
+                  hint: const Text('Chọn nhóm máu'),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'A',
+                      child: Text('A'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'B',
+                      child: Text('B'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'AB',
+                      child: Text('AB'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'O',
+                      child: Text('O'),
+                    ),
+                  ],
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      bloodType = newValue;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+              EditItem(
+                title: "Tiền sử bệnh",
+                widget: DropdownButtonFormField<String>(
+                  value: mediaHistory,
+                  hint: const Text('Tiền sử bệnh'),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'khong',
+                      child: Text('Không'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'diung',
+                      child: Text('Dị ứng'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'caohuyetap',
+                      child: Text('Cao huyết áp'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'timmach',
+                      child: Text('Tim mạch'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'gan',
+                      child: Text('Gan'),
+                    ),
+                  ],
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      mediaHistory = newValue;
+                    });
+                  },
+                ),
               ),
             ],
           ),

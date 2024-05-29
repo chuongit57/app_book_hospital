@@ -24,6 +24,17 @@ List<Doctors> generateDoctorList() {
       khoa: Khoa(id: 'K02', name: 'Khoa than kinh'),
       bangcap: 'MD',
       image: "lib/assets/doctor2.png",
-    )
+    ),
+    Doctors(
+      doctorId: 3,
+      name: 'Ngô Gia Huy',
+      address: 'Mai Thanh Nam',
+      phoneNumber: 'Mai Thanh Nam',
+      gender: 'Mai Thanh Nam',
+      mail: 'Mai Thanh Nam',
+      khoa: Khoa(id: 'K01', name: 'Khoa nhi'),
+      bangcap: 'Eo co',
+      image: "lib/assets/doctor2.png",
+    ),
   ];
 }
