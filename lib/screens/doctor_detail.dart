@@ -1,7 +1,7 @@
 import 'package:app_medicine/screens/AppointmentBookingScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import "package:latlong2/latlong.dart" as latLng;
+import 'package:latlong2/latlong.dart' as latLng;
 import '../styles/colors.dart';
 import '../styles/styles.dart';
 
@@ -19,15 +19,15 @@ class SliverDoctorDetail extends StatelessWidget {
             backgroundColor: Color(MyColors.primary),
             expandedHeight: 200,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image(
-                image: AssetImage('lib/assets/hospital.jpeg'),
+              background: Image.asset(
+                'lib/assets/hospital.jpeg',
                 fit: BoxFit.cover,
               ),
             ),
           ),
           SliverToBoxAdapter(
             child: DetailBody(),
-          )
+          ),
         ],
       ),
     );
@@ -35,9 +35,7 @@ class SliverDoctorDetail extends StatelessWidget {
 }
 
 class DetailBody extends StatelessWidget {
-  const DetailBody({
-    Key? key,
-  }) : super(key: key);
+  const DetailBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,60 +46,59 @@ class DetailBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           DetailDoctorCard(),
-          SizedBox(
-            height: 15,
-          ),
+          SizedBox(height: 15),
           DoctorInfo(),
-          SizedBox(
-            height: 30,
-          ),
+          SizedBox(height: 30),
+          SectionTitle(title: 'Chi tiết về bác sĩ'),
+          SizedBox(height: 10),
           Text(
-            'Chi tiết về bác sĩ',
-            style: kTitleStyle,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            'là một chuyên gia về nội khoa',
+            'Mai Thanh Nam là một chuyên gia về tim mạch với hơn 10 năm kinh nghiệm. Bác sĩ đã từng làm việc tại nhiều bệnh viện hàng đầu và đã giúp đỡ hàng nghìn bệnh nhân.',
             style: TextStyle(
               color: Color(MyColors.purple01),
               fontWeight: FontWeight.w500,
               height: 1.5,
             ),
           ),
-          SizedBox(
-            height: 25,
-          ),
+          SizedBox(height: 25),
+          SectionTitle(title: 'Chuyên khoa'),
+          SizedBox(height: 10),
           Text(
-            'Nơi làm việc',
-            style: kTitleStyle,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            'Bệnh viện Đại học Y',
+            'Tim mạch',
             style: TextStyle(
               color: Color(MyColors.purple01),
               fontWeight: FontWeight.w900,
               height: 1.5,
             ),
           ),
-          SizedBox(
-            height: 25,
+          SizedBox(height: 25),
+          SectionTitle(title: 'Giờ khám bệnh'),
+          SizedBox(height: 10),
+          Text(
+            'Thứ 2 - Thứ 6: 8:00 AM - 5:00 PM\nThứ 7: 8:00 AM - 12:00 PM',
+            style: TextStyle(
+              color: Color(MyColors.purple01),
+              fontWeight: FontWeight.w500,
+              height: 1.5,
+            ),
           ),
+          SizedBox(height: 25),
           DoctorLocation(),
-          SizedBox(
-            height: 25,
-          ),
+          SizedBox(height: 25),
           ElevatedButton(
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(
                 Color(MyColors.primary),
               ),
+              padding: MaterialStateProperty.all<EdgeInsets>(
+                EdgeInsets.symmetric(vertical: 15),
+              ),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
-            child: Text('Đặt lịch hẹn'),
+            child: Text('Đặt lịch hẹn', style: TextStyle(fontSize: 16)),
             onPressed: () => {
               Navigator.push(
                 context,
@@ -110,7 +107,7 @@ class DetailBody extends StatelessWidget {
                 ),
               ),
             },
-          )
+          ),
         ],
       ),
     );
@@ -118,61 +115,50 @@ class DetailBody extends StatelessWidget {
 }
 
 class DoctorLocation extends StatelessWidget {
-  const DoctorLocation({
-    Key? key,
-  }) : super(key: key);
+  const DoctorLocation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 200,
-      child: ClipRRect(borderRadius: BorderRadius.circular(20)),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        width: double.infinity,
+        height: 200,
+        color: Colors.grey[300],
+        // Replace with a Map widget or Image if necessary
+      ),
     );
   }
 }
 
 class DoctorInfo extends StatelessWidget {
-  const DoctorInfo({
-    Key? key,
-  }) : super(key: key);
+  const DoctorInfo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: const [
-        NumberCard(
-          label: 'Người bệnh',
-          value: '100+',
-        ),
+        NumberCard(label: 'Người bệnh', value: '100+'),
         SizedBox(width: 15),
-        NumberCard(
-          label: 'Kinh nghiệm',
-          value: '10 năm',
-        ),
+        NumberCard(label: 'Kinh nghiệm', value: '10 năm'),
         SizedBox(width: 15),
-        NumberCard(
-          label: 'Đánh giá',
-          value: '4.0',
-        ),
+        NumberCard(label: 'Đánh giá', value: '4.0'),
       ],
     );
   }
 }
 
-class AboutDoctor extends StatelessWidget {
+class SectionTitle extends StatelessWidget {
   final String title;
-  final String desc;
 
-  const AboutDoctor({
-    Key? key,
-    required this.title,
-    required this.desc,
-  }) : super(key: key);
+  const SectionTitle({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Text(
+      title,
+      style: kTitleStyle,
+    );
   }
 }
 
@@ -180,11 +166,7 @@ class NumberCard extends StatelessWidget {
   final String label;
   final String value;
 
-  const NumberCard({
-    Key? key,
-    required this.label,
-    required this.value,
-  }) : super(key: key);
+  const NumberCard({Key? key, required this.label, required this.value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -194,10 +176,7 @@ class NumberCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           color: Color(MyColors.bg03),
         ),
-        padding: EdgeInsets.symmetric(
-          vertical: 20,
-          horizontal: 10,
-        ),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         child: Column(
           children: [
             Text(
@@ -208,9 +187,7 @@ class NumberCard extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             Text(
               value,
               style: TextStyle(
@@ -227,48 +204,49 @@ class NumberCard extends StatelessWidget {
 }
 
 class DetailDoctorCard extends StatelessWidget {
-  const DetailDoctorCard({
-    Key? key,
-  }) : super(key: key);
+  const DetailDoctorCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        child: Container(
-          padding: EdgeInsets.all(15),
-          width: double.infinity,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Mai Thanh Nam',
-                      style: TextStyle(color: Color(MyColors.header01), fontWeight: FontWeight.w700),
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Padding(
+        padding: EdgeInsets.all(15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Mai Thanh Nam',
+                    style: TextStyle(
+                      color: Color(MyColors.header01),
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
                     ),
-                    SizedBox(
-                      height: 10,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Bác sĩ tim mạch',
+                    style: TextStyle(
+                      color: Color(MyColors.grey02),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
                     ),
-                    Text(
-                      'Bác sĩ tim mạch',
-                      style: TextStyle(
-                        color: Color(MyColors.grey02),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Image(
-                image: AssetImage('lib/assets/doctor2.png'),
-                width: 100,
-              )
-            ],
-          ),
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                'lib/assets/doctor2.png',
+                width: 80,
+              ),
+            ),
+          ],
         ),
       ),
     );

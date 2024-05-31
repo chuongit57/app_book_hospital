@@ -1,4 +1,3 @@
-import 'package:app_medicine/screens/advise.dart';
 import 'package:app_medicine/screens/prescription_search.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -12,6 +11,5 @@ Map<String, Widget Function(BuildContext)> routes = {
   '/detail': (context) => SliverDoctorDetail(),
   '/login': (context) => LoginScreen(),
   '/prescription': (context) => PrescriptionSearchTab(),
-  '/advise' : (context) => ChatScreen(),
   '/AppointmentBooking' : (context) => AppointmentBookingScreen(),
 };

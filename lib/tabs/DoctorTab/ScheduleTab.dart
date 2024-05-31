@@ -1,9 +1,9 @@
+import 'package:app_medicine/data_fake/schedules.dart';
 import 'package:app_medicine/model/filter_status.dart';
 import 'package:app_medicine/screens/AppointmentBookingScreen.dart';
+import 'package:app_medicine/styles/colors.dart';
+import 'package:app_medicine/styles/styles.dart';
 import 'package:flutter/material.dart';
-import '../styles/colors.dart';
-import '../styles/styles.dart';
-import '../data_fake/schedules.dart'; // Import danh sách schedules
 
 class ScheduleTab extends StatefulWidget {
   final String statusSchedule;
@@ -13,8 +13,6 @@ class ScheduleTab extends StatefulWidget {
   @override
   State<ScheduleTab> createState() => _ScheduleTabState();
 }
-
-// Không cần định nghĩa lại FilterStatus và FilterStatusExtension ở đây nữa
 
 class _ScheduleTabState extends State<ScheduleTab> {
   FilterStatus status = FilterStatus.Upcoming;
@@ -58,13 +56,16 @@ class _ScheduleTabState extends State<ScheduleTab> {
     }).toList();
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Lịch hẹn của bác sĩ'),
+      ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Đặt lịch bác sĩ',
+              'Lịch hẹn của bác sĩ',
               textAlign: TextAlign.center,
               style: kTitleStyle,
             ),
@@ -132,23 +133,23 @@ class _ScheduleTabState extends State<ScheduleTab> {
                 )
               ],
             ),
-            SizedBox(height: 20),
-            DropdownButton<String>(
-              value: _selectedDepartment,
-              hint: Text('Chọn Khoa'),
-              isExpanded: true,
-              items: _departments.map((String department) {
-                return DropdownMenuItem<String>(
-                  value: department,
-                  child: Text(department),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedDepartment = newValue;
-                });
-              },
-            ),
+            // SizedBox(height: 20),
+            // DropdownButton<String>(
+            //   value: _selectedDepartment,
+            //   hint: Text('Chọn Khoa'),
+            //   isExpanded: true,
+            //   items: _departments.map((String department) {
+            //     return DropdownMenuItem<String>(
+            //       value: department,
+            //       child: Text(department),
+            //     );
+            //   }).toList(),
+            //   onChanged: (String? newValue) {
+            //     setState(() {
+            //       _selectedDepartment = newValue;
+            //     });
+            //   },
+            // ),
             SizedBox(height: 20),
             DropdownButton<String>(
               value: _selectedDate,
@@ -195,7 +196,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    _schedule['doctorName'],
+                                    _schedule['patientName'],
                                     style: TextStyle(
                                       color: Color(MyColors.header01),
                                       fontWeight: FontWeight.w700,
@@ -203,7 +204,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    _schedule['doctorTitle'],
+                                    _schedule['patientReason'],
                                     style: TextStyle(
                                       color: Color(MyColors.grey02),
                                       fontSize: 12,

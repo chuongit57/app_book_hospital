@@ -1,16 +1,17 @@
 import 'dart:ui';
 import 'package:app_medicine/data_fake/data_doctor.dart';
+import 'package:app_medicine/data_fake/hospitals.dart';
 import 'package:flutter/material.dart';
 import '../model/doctors.dart';
 import '../styles/colors.dart';
 import '../styles/styles.dart';
 
-List<Map> doctors = [
-  {'img': 'lib/assets/doctor2.png', 'doctorName': 'Mai Thanh Nam', 'doctorTitle': 'Bác sĩ tim mạch'},
-  {'img': 'lib/assets/doctor2.png', 'doctorName': 'Nguyễn Lê Lâm', 'doctorTitle': 'Bác sĩ thần kinh'},
-  {'img': 'lib/assets/doctor2.png', 'doctorName': 'Thạch Xuân Hoàng', 'doctorTitle': 'Bác sĩ nha khoa'},
-  {'img': 'lib/assets/doctor2.png', 'doctorName': 'Hồ Huy', 'doctorTitle': 'Bác sĩ da liễu'}
-];
+// List<Map> doctors = [
+//   {'img': 'lib/assets/doctor2.png', 'doctorName': 'Mai Thanh Nam', 'doctorTitle': 'Bác sĩ tim mạch'},
+//   {'img': 'lib/assets/doctor2.png', 'doctorName': 'Nguyễn Lê Lâm', 'doctorTitle': 'Bác sĩ thần kinh'},
+//   {'img': 'lib/assets/doctor2.png', 'doctorName': 'Thạch Xuân Hoàng', 'doctorTitle': 'Bác sĩ nha khoa'},
+//   {'img': 'lib/assets/doctor2.png', 'doctorName': 'Hồ Huy', 'doctorTitle': 'Bác sĩ da liễu'}
+// ];
 
 List<Map> categories = [
   {'icon': Icons.chat, 'text': 'Tư vấn'},
@@ -216,7 +217,7 @@ class TopDoctorCard extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      '4.0 - 50 đánh giá',
+                      '4.3 - 51 đánh giá',
                       style: TextStyle(color: Color(MyColors.grey02)),
                     )
                   ],
@@ -427,21 +428,9 @@ class CategoryIcon extends StatelessWidget {
                 ),
               ),
             }
-          else
+          else if(text == "Bệnh viện")
             {
-              showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  // title: const Text('Tính năng đang phát triển'),
-                  content: const Text('Tính năng đang phát triển', textAlign: TextAlign.center),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'OK'),
-                      child: const Text('OK'),
-                    ),
-                  ],
-                ),
-              ),
+
             }
       },
       child: Padding(
@@ -515,6 +504,31 @@ class SearchInput extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class HospitalListScreen extends StatelessWidget {
+  const HospitalListScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Danh sách bệnh viện'),
+        backgroundColor: Color(MyColors.primary),
+      ),
+      body: ListView.builder(
+        itemCount: hospitals.length,
+        itemBuilder: (context, index) {
+          final hospital = hospitals[index];
+          return ListTile(
+            title: Text(hospital.name),
+            subtitle: Text(hospital.address),
+            leading: Icon(Icons.local_hospital),
+          );
+        },
       ),
     );
   }
