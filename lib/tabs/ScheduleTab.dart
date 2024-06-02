@@ -1,5 +1,7 @@
+import 'package:app_medicine/model/department.dart';
 import 'package:app_medicine/model/filter_status.dart';
 import 'package:app_medicine/screens/AppointmentBookingScreen.dart';
+import 'package:app_medicine/service/department_service.dart';
 import 'package:flutter/material.dart';
 import '../styles/colors.dart';
 import '../styles/styles.dart';
@@ -17,20 +19,14 @@ class ScheduleTab extends StatefulWidget {
 // Không cần định nghĩa lại FilterStatus và FilterStatusExtension ở đây nữa
 
 class _ScheduleTabState extends State<ScheduleTab> {
+  final departmentService = DepartmentService();
+
   FilterStatus status = FilterStatus.Upcoming;
   Alignment _alignment = Alignment.centerLeft;
   String? _selectedDepartment;
   String? _selectedDate;
 
-  final List<String> _departments = [
-    'Tất cả',
-    'Khoa Nội',
-    'Khoa Thần Kinh',
-    'Khoa Ngoại',
-    'Khoa Nha Khoa',
-    'Khoa Da Liễu',
-    'Khoa Răng Hàm Mặt',
-  ];
+  late List<Department> _departments = [];
 
   final List<String> _dates = [
     'Tất cả',
@@ -43,11 +39,25 @@ class _ScheduleTabState extends State<ScheduleTab> {
   @override
   void initState() {
     super.initState();
-    if (widget.statusSchedule == 'Hoàn thành') {
+    _fetchData();
+    if (widget.statusSchedule == 'Lịch hẹn') {
       status = FilterStatus.Complete;
       _alignment = Alignment.center;
     }
   }
+
+  Future<void> _fetchData() async {
+    try {
+      List<Department> departments = await departmentService.getSelectDepartments();
+      setState(() {
+        _departments = departments;
+      });
+    } catch (e) {
+      // Handle errors here
+      print('Failed to load departments: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -137,10 +147,10 @@ class _ScheduleTabState extends State<ScheduleTab> {
               value: _selectedDepartment,
               hint: Text('Chọn Khoa'),
               isExpanded: true,
-              items: _departments.map((String department) {
+              items: _departments.map((Department department) {
                 return DropdownMenuItem<String>(
-                  value: department,
-                  child: Text(department),
+                  value: department.code,
+                  child: Text(department.name),
                 );
               }).toList(),
               onChanged: (String? newValue) {

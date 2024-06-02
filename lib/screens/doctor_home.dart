@@ -1,9 +1,9 @@
+import 'package:app_medicine/tabs/Report/ReportDoctor.dart';
 import 'package:app_medicine/tabs/SettingTab.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/colors.dart';
-import '../tabs/HomeTab.dart';
-import '../tabs/ScheduleTab.dart';
+import '../tabs/DoctorTab/ScheduleTab.dart';
 
 class DoctorHome extends StatefulWidget {
   const DoctorHome({Key? key}) : super(key: key);
@@ -14,7 +14,8 @@ class DoctorHome extends StatefulWidget {
 
 List<Map> navigationBarItems = [
   {'icon': Icons.calendar_today, 'index': 0},
-  {'icon': Icons.account_balance, 'index': 1},
+  {'icon': Icons.report, 'index': 1},
+  {'icon': Icons.account_balance, 'index': 2},
 ];
 
 class _HomeState extends State<DoctorHome> {
@@ -25,7 +26,7 @@ class _HomeState extends State<DoctorHome> {
       _selectedIndex = 1;
     });
     setState(() {
-      statusSchedule = 'Hoàn thành';
+      statusSchedule = 'Lịch hẹn';
     });
   }
 
@@ -33,6 +34,7 @@ class _HomeState extends State<DoctorHome> {
   Widget build(BuildContext context) {
     List<Widget> screens = [
       ScheduleTab(statusSchedule: statusSchedule),
+      ReportDoctor(),
       SettingTab(),
     ];
 

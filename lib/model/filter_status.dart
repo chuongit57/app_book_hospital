@@ -7,9 +7,9 @@ extension FilterStatusExtension on FilterStatus {
       case FilterStatus.Upcoming:
         return 'Sắp tới';
       case FilterStatus.Complete:
-        return 'Hoàn thành';
+        return 'Lịch hẹn';
       case FilterStatus.Cancel:
-        return 'Hủy bỏ';
+        return 'Hoàn thành';
       default:
         return "";
     }

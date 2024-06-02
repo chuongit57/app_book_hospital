@@ -1,9 +1,23 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ApiService {
   static Future<http.Response> get(url) async {
     final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts/1'));
+    return response;
+  }
+
+  static Future<http.Response> getToken(url) async {
+    final secureStorage = FlutterSecureStorage();
+    String? token = await secureStorage.read(key: 'token');
+    final response = await http.get(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    );
     return response;
   }
 

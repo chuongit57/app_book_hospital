@@ -6,11 +6,11 @@ import '../styles/colors.dart';
 import '../tabs/HomeTab.dart';
 import '../tabs/ScheduleTab.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class Admin extends StatefulWidget {
+  const Admin({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _AdminState createState() => _AdminState();
 }
 
 List<Map> navigationBarItems = [
@@ -19,8 +19,14 @@ List<Map> navigationBarItems = [
   {'icon': Icons.account_balance, 'index': 2},
 ];
 
+// final List<Users> defaultUsers = [
+//   Users(usrName: "admin", usrPassword: "111111"),
+//   Users(usrName: "doctor", usrPassword: "111111"),
+//   Users(usrName: "chuong", usrPassword: "111111"),
+//   Users(usrName: "aaaaaa", usrPassword: "111111"),
+// ];
 
-class _HomeState extends State<Home> {
+class _AdminState extends State<Admin> {
   int _selectedIndex = 0;
   String statusSchedule = '';
   void goToSchedule() {
@@ -32,6 +38,17 @@ class _HomeState extends State<Home> {
     });
   }
 
+
+  // Future<bool> getData() async {
+  //   await Future.delayed(Duration(seconds: 5));
+  //   for user in userAo {
+  //     user.username == usertext {
+  //       if ===
+  //
+  //       return true;
+  //   }
+  //   retrun false
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +88,9 @@ class _HomeState extends State<Home> {
                 ),
                 child: Icon(
                   navigationBarItem['icon'],
+                  // color: _selectedIndex == 0
+                  //     ? Color(MyColors.bg01)
+                  //     : Color(MyColors.bg02),
                 ),
               ),
               label: '',

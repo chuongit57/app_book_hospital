@@ -1,6 +1,4 @@
 import 'nhomMau.dart';
-import 'tienSuBenh.dart';
-
 class Patients {
   final int patientId;
   final String name;
@@ -9,18 +7,19 @@ class Patients {
   final String gender;
   final String height;
   final String weight;
-  final nhom_mau Mhom_mau;
-  final tien_su_benh Tien_su_benh;
-
-
+  final nhom_mau nhomMau;
+  final String tienSuBenh;
+  final String note;
   Patients(
       {required this.patientId,
-        required this.name,
-        required this.address,
-        required this.phoneNumber,
-        required this.gender,
-        required this.height,
-        required this.weight,
-        required this.Mhom_mau,
-        required this.Tien_su_benh});
+      required this.name,
+      required this.address,
+      required this.phoneNumber,
+      required this.gender,
+      required this.height,
+      required this.weight,
+      required this.nhomMau,
+      required this.tienSuBenh,
+      required this.note
+      });
 }

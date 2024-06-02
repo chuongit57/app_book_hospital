@@ -1,6 +1,9 @@
 import 'dart:ui';
 import 'package:app_medicine/data_fake/data_doctor.dart';
 import 'package:app_medicine/data_fake/hospitals.dart';
+import 'package:app_medicine/model/department.dart';
+import 'package:app_medicine/model/doctor.dart';
+import 'package:app_medicine/service/doctor_service.dart';
 import 'package:flutter/material.dart';
 import '../model/doctors.dart';
 import '../styles/colors.dart';
@@ -33,12 +36,15 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  List<Doctors> docters = [];
+  final doctorService = DoctorService();
 
-  Future<List<Doctors>> getBacsihangdau() async {
-    await Future.delayed(Duration(seconds: 5));
-    docters = generateDoctorList();
-    return docters;
+  List<Doctor> listDoctor = [
+    Doctor(code: 'BS01', name: 'Mai Thanh Nam', yearOfBirth: '1992', address: 'Hồ Chí Minh', phone: '986585458', email: 'maithanhnam@gmail.com', gender: 'Nam', degree: 'Bác sĩ chuyên khoa 1', department: Department(code: 'K02', name: 'Khoa thần kinh'))
+  ];
+
+  Future<List<Doctor>> getListDoctorTop() async {
+    listDoctor = await doctorService.getListDoctorTop();
+    return listDoctor;
   }
 
   @override
@@ -98,39 +104,42 @@ class _HomeTabState extends State<HomeTab> {
               ],
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
-            FutureBuilder<List<Doctors>>(
-              future: getBacsihangdau(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  // While the data is loading, display a loading indicator
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  // If there's an error while fetching data, display an error message
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  // If no data is returned, display a message
-                  return Center(child: Text('No data found'));
-                } else {
-                  // If the data is loaded successfully, display the list of doctors
-                  List<Doctors> doctorss = snapshot.data!;
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: doctorss.length,
-                    itemBuilder: (context, index) {
-                      var doctor = doctorss[index];
-                      return TopDoctorCard(
-                        img: 'lib/assets/doctor2.png', // Replace with actual image path
-                        doctorName: doctor.name,
-                        doctorKhoa: doctor.khoa.name,
-                      );
-                    },
-                  );
-                }
-              },
+            SizedBox(
+              height: 350,
+              child:  FutureBuilder<List<Doctor>>(
+                future: getListDoctorTop(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // While the data is loading, display a loading indicator
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    // If there's an error while fetching data, display an error message
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    // If no data is returned, display a message
+                    return Center(child: Text('No data found'));
+                  } else {
+                    // If the data is loaded successfully, display the list of doctors
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: listDoctor.length,
+                      itemBuilder: (context, index) {
+                        var doctor = listDoctor[index];
+                        return TopDoctorCard(
+                          img: 'lib/assets/doctor2.png', // Replace with actual image path
+                          doctorName: doctor.name,
+                          doctorKhoa: doctor.department.name,
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
             ),
+
           ],
         ),
       ),
@@ -168,7 +177,7 @@ class TopDoctorCard extends StatelessWidget {
               'doctorTitle': doctorKhoa,
               'reservedDate': 'Thứ 3, 14 tháng 5',
               'reservedTime': '08:00 - 11:00',
-              'status': "Hoàn thành"
+              'status': "Lịch hẹn"
             });
           },
           child: Padding(

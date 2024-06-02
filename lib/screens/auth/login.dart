@@ -3,11 +3,13 @@ import 'dart:io';
 
 import 'package:app_medicine/model/role.dart';
 import 'package:app_medicine/model/user.dart';
+import 'package:app_medicine/screens/Admin.dart';
 import 'package:app_medicine/screens/auth/signup.dart';
 import 'package:app_medicine/screens/doctor_home.dart';
 import 'package:app_medicine/service/auth_service.dart';
 import 'package:app_medicine/widgets/error_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../home.dart';
 
@@ -19,7 +21,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   final username = TextEditingController();
   final password = TextEditingController();
 
@@ -39,6 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
     if (result.statusCode == HttpStatus.ok) {
       final Map<String, dynamic> resultData = jsonDecode(result.body);
       // Luu Token
+      final storage = const FlutterSecureStorage();
+      await storage.write(key: 'token', value: resultData['access_token']);
+      await storage.write(key: 'refresh_token', value: resultData['refresh_token']);
+
       // Chia quyen
       user = User();
       var dataUser = jsonDecode(jsonEncode(resultData['user']));
@@ -47,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
       user.lastname = dataUser['lastname'];
       user.firstname = dataUser['firstname'];
       if (user.role == Role.ADMIN) {
-        print("Dang phat trien");
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Admin()));
       } else if (user.role == Role.USER) {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Home()));
       } else if (user.role == Role.DOCTOR) {
@@ -94,11 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 15),
                   Container(
                     margin: const EdgeInsets.all(8),
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.deepPurple.withOpacity(.2)),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.deepPurple.withOpacity(.2)),
                     child: TextFormField(
                       controller: username,
                       validator: (value) {
@@ -118,11 +121,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   //Password field
                   Container(
                     margin: const EdgeInsets.all(8),
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.deepPurple.withOpacity(.2)),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.deepPurple.withOpacity(.2)),
                     child: TextFormField(
                       controller: password,
                       validator: (value) {
@@ -144,9 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   isVisible = !isVisible;
                                 });
                               },
-                              icon: Icon(isVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off))),
+                              icon: Icon(isVisible ? Icons.visibility : Icons.visibility_off))),
                     ),
                   ),
 
@@ -154,13 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   //Login button
                   Container(
                     height: 55,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * .9,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.deepPurple),
+                    width: MediaQuery.of(context).size.width * .9,
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.deepPurple),
                     child: TextButton(
                         onPressed: () {
                           if (formKey.currentState!.validate()) {
@@ -185,10 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextButton(
                           onPressed: () {
                             //Navigate to sign up
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SignUp()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUp()));
                           },
                           child: const Text("Đăng ký"))
                     ],
@@ -197,9 +188,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   // We will disable this message in default, when user and pass is incorrect we will trigger this message to user
                   isLoginTrue
                       ? const Text(
-                    "Tên đăng nhập hoặc mật khẩu không chính xác",
-                    style: TextStyle(color: Colors.red),
-                  )
+                          "Tên đăng nhập hoặc mật khẩu không chính xác",
+                          style: TextStyle(color: Colors.red),
+                        )
                       : const SizedBox(),
                 ],
               ),
@@ -209,5 +200,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
 }

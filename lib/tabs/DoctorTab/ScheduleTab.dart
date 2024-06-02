@@ -1,9 +1,10 @@
-import 'package:app_medicine/data_fake/schedules.dart';
+import 'package:app_medicine/data_fake/schedule_patient.dart';
 import 'package:app_medicine/model/filter_status.dart';
+import 'package:app_medicine/model/patients.dart';
 import 'package:app_medicine/screens/AppointmentBookingScreen.dart';
 import 'package:app_medicine/styles/colors.dart';
 import 'package:app_medicine/styles/styles.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Import danh sách schedules
 
 class ScheduleTab extends StatefulWidget {
   final String statusSchedule;
@@ -14,21 +15,13 @@ class ScheduleTab extends StatefulWidget {
   State<ScheduleTab> createState() => _ScheduleTabState();
 }
 
+// Không cần định nghĩa lại FilterStatus và FilterStatusExtension ở đây nữa
+
 class _ScheduleTabState extends State<ScheduleTab> {
   FilterStatus status = FilterStatus.Upcoming;
   Alignment _alignment = Alignment.centerLeft;
-  String? _selectedDepartment;
   String? _selectedDate;
-
-  final List<String> _departments = [
-    'Tất cả',
-    'Khoa Nội',
-    'Khoa Thần Kinh',
-    'Khoa Ngoại',
-    'Khoa Nha Khoa',
-    'Khoa Da Liễu',
-    'Khoa Răng Hàm Mặt',
-  ];
+  List<Patients> patients = [];
 
   final List<String> _dates = [
     'Tất cả',
@@ -41,7 +34,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
   @override
   void initState() {
     super.initState();
-    if (widget.statusSchedule == 'Hoàn thành') {
+    if (widget.statusSchedule == 'Lịch hẹn') {
       status = FilterStatus.Complete;
       _alignment = Alignment.center;
     }
@@ -49,23 +42,19 @@ class _ScheduleTabState extends State<ScheduleTab> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map> filteredSchedules = schedules.where((var schedule) {
-      return schedule['status'] == status &&
-          (_selectedDepartment == null || _selectedDepartment == 'Tất cả' || schedule['department'] == _selectedDepartment) &&
-          (_selectedDate == null || _selectedDate == 'Tất cả' || schedule['reservedDate'] == _selectedDate);
+    List<Map> filteredSchedules = schedule_patient.where((var patients) {
+      return patients['status'] == status &&
+          (_selectedDate == null || _selectedDate == 'Tất cả' || patients['reservedDate'] == _selectedDate);
     }).toList();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Lịch hẹn của bác sĩ'),
-      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Lịch hẹn của bác sĩ',
+              'Lịch khám',
               textAlign: TextAlign.center,
               style: kTitleStyle,
             ),
@@ -133,23 +122,6 @@ class _ScheduleTabState extends State<ScheduleTab> {
                 )
               ],
             ),
-            // SizedBox(height: 20),
-            // DropdownButton<String>(
-            //   value: _selectedDepartment,
-            //   hint: Text('Chọn Khoa'),
-            //   isExpanded: true,
-            //   items: _departments.map((String department) {
-            //     return DropdownMenuItem<String>(
-            //       value: department,
-            //       child: Text(department),
-            //     );
-            //   }).toList(),
-            //   onChanged: (String? newValue) {
-            //     setState(() {
-            //       _selectedDepartment = newValue;
-            //     });
-            //   },
-            // ),
             SizedBox(height: 20),
             DropdownButton<String>(
               value: _selectedDate,
@@ -175,7 +147,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   var _schedule = filteredSchedules[index];
                   bool isLastElement = filteredSchedules.length + 1 == index;
                   var textButton = filteredSchedules[index]['status'] == FilterStatus.Upcoming
-                      ? 'Đặt lịch'
+                      ? 'Hủy Lịch hẹn'
                       : filteredSchedules[index]['status'] == FilterStatus.Complete
                       ? 'Hủy bỏ'
                       : 'Xóa';
@@ -204,7 +176,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    _schedule['patientReason'],
+                                    'Bệnh nhân',
                                     style: TextStyle(
                                       color: Color(MyColors.grey02),
                                       fontSize: 12,
@@ -228,7 +200,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                 child: OutlinedButton(
                                   child: Text('Chi tiết'),
                                   onPressed: () {
-                                    Navigator.pushNamed(context, '/detail', arguments: filteredSchedules[index]);
+                                    Navigator.pushNamed(context, '/patientDetail', arguments: filteredSchedules[index]);
                                   },
                                 ),
                               ),
@@ -242,12 +214,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                     } else if (status == FilterStatus.Cancel) {
                                       _deleteSchedule(_schedule);
                                     } else {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => AppointmentBookingScreen(),
-                                        ),
-                                      );
+                                      _showCancelConfirmationDialog(context, _schedule);
                                     }
                                   },
                                 ),
@@ -296,9 +263,37 @@ class _ScheduleTabState extends State<ScheduleTab> {
     );
   }
 
+  void _showCancelScheduleConfirmationDialog(BuildContext context, Map schedule) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Xác nhận hủy bỏ'),
+          content: Text('Bạn có chắc chắn muốn hủy bỏ lịch hẹn này không?'),
+          actions: [
+            TextButton(
+              child: Text('Không'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Có'),
+              onPressed: () {
+                setState(() {
+                  schedule['status'] = FilterStatus.Cancel;
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _deleteSchedule(Map schedule) {
     setState(() {
-      schedules.remove(schedule);
+      schedule_patient.remove(schedule);
     });
   }
 }
