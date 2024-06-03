@@ -99,11 +99,11 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                 if (filterStatus == FilterStatus.Upcoming) {
                                   status = FilterStatus.Upcoming;
                                   _alignment = Alignment.centerLeft;
+                                } else if (filterStatus == FilterStatus.Schedule) {
+                                  status = FilterStatus.Schedule;
+                                  _alignment = Alignment.center;
                                 } else if (filterStatus == FilterStatus.Complete) {
                                   status = FilterStatus.Complete;
-                                  _alignment = Alignment.center;
-                                } else if (filterStatus == FilterStatus.Cancel) {
-                                  status = FilterStatus.Cancel;
                                   _alignment = Alignment.centerRight;
                                 }
                               });
@@ -185,9 +185,9 @@ class _ScheduleTabState extends State<ScheduleTab> {
                   bool isLastElement = filteredSchedules.length + 1 == index;
                   var textButton = filteredSchedules[index]['status'] == FilterStatus.Upcoming
                       ? 'Đặt lịch'
-                      : filteredSchedules[index]['status'] == FilterStatus.Complete
-                      ? 'Hủy bỏ'
-                      : 'Xóa';
+                      : filteredSchedules[index]['status'] == FilterStatus.Schedule
+                      ? 'Hủy lịch hẹn'
+                      : 'Đánh giá bác sĩ';
                   return Card(
                     margin: !isLastElement ? EdgeInsets.only(bottom: 20) : EdgeInsets.zero,
                     child: Padding(
@@ -246,10 +246,10 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                 child: ElevatedButton(
                                   child: Text(textButton),
                                   onPressed: () {
-                                    if (status == FilterStatus.Complete) {
+                                    if (status == FilterStatus.Schedule) {
                                       _showCancelConfirmationDialog(context, _schedule);
-                                    } else if (status == FilterStatus.Cancel) {
-                                      _deleteSchedule(_schedule);
+                                    } else if (status == FilterStatus.Complete) {
+                                      _reviewSchedule(_schedule);
                                     } else {
                                       Navigator.push(
                                         context,
@@ -294,7 +294,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
               child: Text('Có'),
               onPressed: () {
                 setState(() {
-                  schedule['status'] = FilterStatus.Cancel;
+                  schedule['status'] = FilterStatus.Schedule;
                 });
                 Navigator.of(context).pop();
               },
@@ -305,9 +305,9 @@ class _ScheduleTabState extends State<ScheduleTab> {
     );
   }
 
-  void _deleteSchedule(Map schedule) {
+  void _reviewSchedule(Map schedule) {
     setState(() {
-      schedules.remove(schedule);
+
     });
   }
 }

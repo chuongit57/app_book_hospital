@@ -16,7 +16,7 @@ List<Map> schedules = [
     'doctorTitle': 'Bác sĩ thần kinh',
     'reservedDate': 'Thứ 4, 15 tháng 5',
     'reservedTime': '08:00 - 17:00',
-    'status': FilterStatus.Complete,
+    'status': FilterStatus.Schedule,
     'department': 'Khoa Thần Kinh',
   },
   {
@@ -43,7 +43,7 @@ List<Map> schedules = [
     'doctorTitle': 'Bác sĩ da liễu',
     'reservedDate': 'Thứ 5, 16 tháng 5',
     'reservedTime': '08:00 - 17:00',
-    'status': FilterStatus.Cancel,
+    'status': FilterStatus.Complete,
     'department': 'Khoa Da Liễu',
   },
   {

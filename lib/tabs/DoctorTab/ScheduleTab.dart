@@ -79,11 +79,11 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                 if (filterStatus == FilterStatus.Upcoming) {
                                   status = FilterStatus.Upcoming;
                                   _alignment = Alignment.centerLeft;
+                                } else if (filterStatus == FilterStatus.Schedule) {
+                                  status = FilterStatus.Schedule;
+                                  _alignment = Alignment.center;
                                 } else if (filterStatus == FilterStatus.Complete) {
                                   status = FilterStatus.Complete;
-                                  _alignment = Alignment.center;
-                                } else if (filterStatus == FilterStatus.Cancel) {
-                                  status = FilterStatus.Cancel;
                                   _alignment = Alignment.centerRight;
                                 }
                               });
@@ -211,7 +211,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
                                   onPressed: () {
                                     if (status == FilterStatus.Complete) {
                                       _showCancelConfirmationDialog(context, _schedule);
-                                    } else if (status == FilterStatus.Cancel) {
+                                    } else if (status == FilterStatus.Complete) {
                                       _deleteSchedule(_schedule);
                                     } else {
                                       _showCancelConfirmationDialog(context, _schedule);
@@ -252,7 +252,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
               child: Text('Có'),
               onPressed: () {
                 setState(() {
-                  schedule['status'] = FilterStatus.Cancel;
+                  schedule['status'] = FilterStatus.Complete;
                 });
                 Navigator.of(context).pop();
               },
@@ -281,7 +281,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
               child: Text('Có'),
               onPressed: () {
                 setState(() {
-                  schedule['status'] = FilterStatus.Cancel;
+                  schedule['status'] = FilterStatus.Complete;
                 });
               },
             ),

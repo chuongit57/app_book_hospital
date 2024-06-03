@@ -19,12 +19,6 @@ List<Map> navigationBarItems = [
   {'icon': Icons.account_balance, 'index': 2},
 ];
 
-// final List<Users> defaultUsers = [
-//   Users(usrName: "admin", usrPassword: "111111"),
-//   Users(usrName: "doctor", usrPassword: "111111"),
-//   Users(usrName: "chuong", usrPassword: "111111"),
-//   Users(usrName: "aaaaaa", usrPassword: "111111"),
-// ];
 
 class _AdminState extends State<Admin> {
   int _selectedIndex = 0;
@@ -38,17 +32,6 @@ class _AdminState extends State<Admin> {
     });
   }
 
-
-  // Future<bool> getData() async {
-  //   await Future.delayed(Duration(seconds: 5));
-  //   for user in userAo {
-  //     user.username == usertext {
-  //       if ===
-  //
-  //       return true;
-  //   }
-  //   retrun false
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +71,6 @@ class _AdminState extends State<Admin> {
                 ),
                 child: Icon(
                   navigationBarItem['icon'],
-                  // color: _selectedIndex == 0
-                  //     ? Color(MyColors.bg01)
-                  //     : Color(MyColors.bg02),
                 ),
               ),
               label: '',

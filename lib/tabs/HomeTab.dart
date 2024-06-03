@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:app_medicine/data_fake/data_doctor.dart';
 import 'package:app_medicine/data_fake/hospitals.dart';
+import 'package:app_medicine/model/DTODoctor.dart';
 import 'package:app_medicine/model/department.dart';
 import 'package:app_medicine/model/doctor.dart';
 import 'package:app_medicine/service/doctor_service.dart';
@@ -38,9 +39,7 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   final doctorService = DoctorService();
 
-  List<Doctor> listDoctor = [
-    Doctor(code: 'BS01', name: 'Mai Thanh Nam', yearOfBirth: '1992', address: 'Hồ Chí Minh', phone: '986585458', email: 'maithanhnam@gmail.com', gender: 'Nam', degree: 'Bác sĩ chuyên khoa 1', department: Department(code: 'K02', name: 'Khoa thần kinh'))
-  ];
+  List<Doctor> listDoctor = [];
 
   Future<List<Doctor>> getListDoctorTop() async {
     listDoctor = await doctorService.getListDoctorTop();
@@ -108,7 +107,7 @@ class _HomeTabState extends State<HomeTab> {
             ),
             SizedBox(
               height: 350,
-              child:  FutureBuilder<List<Doctor>>(
+              child: FutureBuilder<List<Doctor>>(
                 future: getListDoctorTop(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -128,10 +127,16 @@ class _HomeTabState extends State<HomeTab> {
                       itemCount: listDoctor.length,
                       itemBuilder: (context, index) {
                         var doctor = listDoctor[index];
+                        var dtoDoctor = DTODoctor(
+                            doctorId: 1,
+                            name: doctor.name,
+                            degree: doctor.degree,
+                            phoneNumber: "phoneNumber",
+                            department: doctor.department.name,
+                            examination_hours: "examination_hours");
                         return TopDoctorCard(
                           img: 'lib/assets/doctor2.png', // Replace with actual image path
-                          doctorName: doctor.name,
-                          doctorKhoa: doctor.department.name,
+                          data: dtoDoctor,
                         );
                       },
                     );
@@ -139,7 +144,6 @@ class _HomeTabState extends State<HomeTab> {
                 },
               ),
             ),
-
           ],
         ),
       ),
@@ -149,17 +153,19 @@ class _HomeTabState extends State<HomeTab> {
 
 class TopDoctorCard extends StatelessWidget {
   final String img;
-  final String doctorName;
-  final String doctorKhoa;
+  final DTODoctor? data;
 
   TopDoctorCard({
     required this.img,
-    required this.doctorName,
-    required this.doctorKhoa,
+    required this.data,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (data == null) {
+      return SizedBox();
+    }
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -171,14 +177,20 @@ class TopDoctorCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            Navigator.pushNamed(context, '/detail', arguments: {
-              'img': img,
-              'doctorName': doctorName,
-              'doctorTitle': doctorKhoa,
-              'reservedDate': 'Thứ 3, 14 tháng 5',
-              'reservedTime': '08:00 - 11:00',
-              'status': "Lịch hẹn"
-            });
+            // Navigator.pushNamed(context, '/detail', arguments: {
+            //   'img': img,
+            //   'doctorName': data?.name,
+            //   'doctorTitle': data?.degree,
+            //   'reservedDate': 'Thứ 3, 14 tháng 5',
+            //   'reservedTime': '08:00 - 11:00',
+            //   'status': "Lịch hẹn"
+            // });
+            Navigator.pushNamed(context, '/detail',
+                arguments: DTODoctorDetail(
+                    doctor: data,
+                    reservedDate: 'Thứ 3, 14 tháng 5',
+                    reservedTime: '08:00 - 11:00',
+                    status: "Lịch hẹn"));
           },
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -197,14 +209,14 @@ class TopDoctorCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          doctorName,
+                          '${data?.name}',
                           style: TextStyle(color: Colors.white),
                         ),
                         SizedBox(
                           height: 2,
                         ),
                         Text(
-                          doctorKhoa,
+                          '${data?.degree}',
                           style: TextStyle(color: Color(MyColors.text01)),
                         ),
                       ],
@@ -418,29 +430,27 @@ class CategoryIcon extends StatelessWidget {
         print(text),
         if (text == 'Đơn thuốc')
           {Navigator.pushNamed(context, '/prescription')}
-        else if(text == 'Tư vấn')
+        else if (text == 'Tư vấn')
           {Navigator.pushNamed(context, '/advide')}
         else if (text == 'Gọi xe')
-            {
-              showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Gọi ngay cho chúng tôi nếu bạn cần', textAlign: TextAlign.center),
-                  content: const Text('0901379115', textAlign: TextAlign.center),
-                  contentTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.pink, fontSize: 22),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'OK'),
-                      child: const Text('OK'),
-                    ),
-                  ],
-                ),
+          {
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('Gọi ngay cho chúng tôi nếu bạn cần', textAlign: TextAlign.center),
+                content: const Text('0901379115', textAlign: TextAlign.center),
+                contentTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.pink, fontSize: 22),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
               ),
-            }
-          else if(text == "Bệnh viện")
-            {
-
-            }
+            ),
+          }
+        else if (text == "Bệnh viện")
+          {}
       },
       child: Padding(
         padding: const EdgeInsets.all(4.0),

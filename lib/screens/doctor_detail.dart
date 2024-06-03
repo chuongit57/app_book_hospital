@@ -1,3 +1,4 @@
+import 'package:app_medicine/model/DTODoctor.dart';
 import 'package:app_medicine/screens/AppointmentBookingScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -10,6 +11,8 @@ class SliverDoctorDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DTODoctorDetail data = ModalRoute.of(context)?.settings.arguments as DTODoctorDetail;
+    print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxdata ${data}");
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -26,7 +29,9 @@ class SliverDoctorDetail extends StatelessWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: DetailBody(),
+            child: DetailBody(
+              data: data, // Pass the data to DetailBody
+            ),
           ),
         ],
       ),
@@ -35,7 +40,9 @@ class SliverDoctorDetail extends StatelessWidget {
 }
 
 class DetailBody extends StatelessWidget {
-  const DetailBody({Key? key}) : super(key: key);
+  final DTODoctorDetail data; // Add a data parameter to accept the doctor details
+
+  const DetailBody({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +52,14 @@ class DetailBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          DetailDoctorCard(),
+          DetailDoctorCard(data: data),
           SizedBox(height: 15),
-          DoctorInfo(),
+          DoctorInfo(data: data),
           SizedBox(height: 30),
           SectionTitle(title: 'Chi tiết về bác sĩ'),
           SizedBox(height: 10),
           Text(
-            'Mai Thanh Nam là một chuyên gia về tim mạch với hơn 10 năm kinh nghiệm. Bác sĩ đã từng làm việc tại nhiều bệnh viện hàng đầu và đã giúp đỡ hàng nghìn bệnh nhân.',
+            data.doctor?.phoneNumber ?? 'Không có thông tin',
             style: TextStyle(
               color: Color(MyColors.purple01),
               fontWeight: FontWeight.w500,
@@ -63,7 +70,7 @@ class DetailBody extends StatelessWidget {
           SectionTitle(title: 'Chuyên khoa'),
           SizedBox(height: 10),
           Text(
-            'Tim mạch',
+            data.doctor?.department ?? 'Không có thông tin',
             style: TextStyle(
               color: Color(MyColors.purple01),
               fontWeight: FontWeight.w900,
@@ -74,7 +81,7 @@ class DetailBody extends StatelessWidget {
           SectionTitle(title: 'Giờ khám bệnh'),
           SizedBox(height: 10),
           Text(
-            'Thứ 2 - Thứ 6: 8:00 AM - 5:00 PM\nThứ 7: 8:00 AM - 12:00 PM',
+            data.doctor?.examination_hours ?? '08:00 - 17:00',
             style: TextStyle(
               color: Color(MyColors.purple01),
               fontWeight: FontWeight.w500,
@@ -132,17 +139,19 @@ class DoctorLocation extends StatelessWidget {
 }
 
 class DoctorInfo extends StatelessWidget {
-  const DoctorInfo({Key? key}) : super(key: key);
+  final DTODoctorDetail data; // Add a data parameter to accept the doctor details
+
+  const DoctorInfo({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const [
-        NumberCard(label: 'Người bệnh', value: '100+'),
+      children: [
+        NumberCard(label: 'Người bệnh', value: data.doctor?.patientCount ?? 'Không có thông tin'),
         SizedBox(width: 15),
-        NumberCard(label: 'Kinh nghiệm', value: '10 năm'),
+        NumberCard(label: 'Kinh nghiệm', value: data.doctor?.experience ?? 'Không có thông tin'),
         SizedBox(width: 15),
-        NumberCard(label: 'Đánh giá', value: '4.0'),
+        NumberCard(label: 'Đánh giá', value: data.doctor?.rating ?? 'Không có thông tin'),
       ],
     );
   }
@@ -204,7 +213,9 @@ class NumberCard extends StatelessWidget {
 }
 
 class DetailDoctorCard extends StatelessWidget {
-  const DetailDoctorCard({Key? key}) : super(key: key);
+  final DTODoctorDetail data; // Add a data parameter to accept the doctor details
+
+  const DetailDoctorCard({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +231,7 @@ class DetailDoctorCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Mai Thanh Nam',
+                    data.doctor?.name ?? 'Không có tên',
                     style: TextStyle(
                       color: Color(MyColors.header01),
                       fontWeight: FontWeight.w700,
@@ -229,7 +240,7 @@ class DetailDoctorCard extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Bác sĩ tim mạch',
+                    data.doctor?.degree ?? 'Không có chức danh',
                     style: TextStyle(
                       color: Color(MyColors.grey02),
                       fontWeight: FontWeight.w500,

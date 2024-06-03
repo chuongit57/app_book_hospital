@@ -1,14 +1,14 @@
 // lib/data_fake/filter_status.dart
-enum FilterStatus { Upcoming, Complete, Cancel }
+enum FilterStatus { Upcoming, Schedule, Complete }
 
 extension FilterStatusExtension on FilterStatus {
   String get name {
     switch (this) {
       case FilterStatus.Upcoming:
         return 'Sắp tới';
-      case FilterStatus.Complete:
+      case FilterStatus.Schedule:
         return 'Lịch hẹn';
-      case FilterStatus.Cancel:
+      case FilterStatus.Complete:
         return 'Hoàn thành';
       default:
         return "";

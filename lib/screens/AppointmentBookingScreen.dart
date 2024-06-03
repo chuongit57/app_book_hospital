@@ -9,7 +9,17 @@ class AppointmentBookingScreen extends StatefulWidget {
 class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
   final _formKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
-  TimeOfDay? _selectedTime;
+  String? _selectedTime;
+
+  final List<String> _time = [
+    '08:00 - 09:00',
+    '09:00 - 10:00',
+    '10:00 - 11:00',
+    '13:00 - 14:00',
+    '14:00 - 15:00',
+    '15:00 - 16:00',
+    '16:00 - 17:00',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +28,7 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
         title: Text('Đặt lịch hẹn'),
         backgroundColor: Colors.pink, // Set the background color of the AppBar
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
         child: Form(
           key: _formKey,
@@ -36,7 +46,7 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20), // Add space between form fields
+              SizedBox(height: 15), // Add space between form fields
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Số điện thoại',
@@ -50,7 +60,46 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20), // Add space between form fields
+              SizedBox(height: 15), // Add space between form fields
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Chiều cao',
+                  border: OutlineInputBorder(), // Add border to text fields
+                ),
+                validator: (value) {
+                  // if (value == null || value.isEmpty) {
+                  //   return 'Vui lòng nhập chiều cao của bạn';
+                  // }
+                  return null;
+                },
+              ),
+              SizedBox(height: 15), // Add space between form fields
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Cân nặng',
+                  border: OutlineInputBorder(), // Add border to text fields
+                ),
+                validator: (value) {
+                  // if (value == null || value.isEmpty) {
+                  //   return 'Vui lòng nhập cân nặng của bạn';
+                  // }
+                  return null;
+                },
+              ),
+              SizedBox(height: 15), // Add space between form fields
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Nhóm máu',
+                  border: OutlineInputBorder(), // Add border to text fields
+                ),
+                validator: (value) {
+                  // if (value == null || value.isEmpty) {
+                  //   return 'Vui lòng nhập nhóm máu của bạn';
+                  // }
+                  return null;
+                },
+              ),
+              SizedBox(height: 15), // Add space between form fields
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Lí do đi khám',
@@ -63,22 +112,41 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20), // Add space between form fields
-              ListTile(
-                title: Text(
-                  _selectedDate == null ? 'Chọn ngày' : 'Ngày: ${DateFormat('yyyy-MM-dd').format(_selectedDate!)}',
-                ),
-                trailing: Icon(Icons.calendar_today),
-                onTap: _pickDate,
+              SizedBox(height: 15), // Add space between form fields
+              Row(
+                children: [
+                  Expanded(
+                    child: ListTile(
+                      title: Text(
+                        _selectedDate == null ? 'Chọn ngày' : '${DateFormat('yyyy-MM-dd').format(_selectedDate!)}',
+                      ),
+                      trailing: Icon(Icons.calendar_today),
+                      onTap: _pickDate,
+                    ),
+                  ),
+                  SizedBox(width: 10), // Add space between ListTile and DropdownButton
+                  Expanded(
+                    child: DropdownButton<String>(
+                      value: _selectedTime,
+                      hint: Text('Chọn giờ khám'),
+                      isExpanded: true,
+                      items: _time.map((String date) {
+                        return DropdownMenuItem<String>(
+                          value: date,
+                          child: Text(date),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedTime = newValue;
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
-              ListTile(
-                title: Text(
-                  _selectedTime == null ? 'Chọn giờ' : 'Giờ: ${_selectedTime!.format(context)}',
-                ),
-                trailing: Icon(Icons.access_time),
-                onTap: _pickTime,
-              ),
-              SizedBox(height: 20), // Add space before the button
+              SizedBox(height: 20),
+              SizedBox(height: 15), // Add space before the button
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -114,14 +182,36 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
   }
 
   void _pickTime() async {
-    TimeOfDay? pickedTime = await showTimePicker(
+    List<TimeOfDay> timeSlots = [];
+    TimeOfDay initialTime = TimeOfDay(hour: 0, minute: 0);
+
+    // Generate time slots with 1-hour intervals
+    for (int i = 0; i < 24; i++) {
+      timeSlots.add(initialTime);
+      initialTime = initialTime.replacing(hour: initialTime.hour + 1);
+    }
+
+    // Show time slots in a dialog
+    TimeOfDay? pickedTime = await showDialog<TimeOfDay>(
       context: context,
-      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text('Chọn các khung giờ'),
+          children: timeSlots
+              .map((time) => SimpleDialogOption(
+            onPressed: () {
+              Navigator.pop(context, time);
+            },
+            child: Text(time.format(context)),
+          ))
+              .toList(),
+        );
+      },
     );
 
     if (pickedTime != null) {
       setState(() {
-        _selectedTime = pickedTime;
+        _selectedTime = "";
       });
     }
   }

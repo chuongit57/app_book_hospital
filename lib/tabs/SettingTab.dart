@@ -64,12 +64,12 @@ class _SettingTabState extends State<SettingTab> {
                     const Spacer(),
                     ForwardButton(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const EditSettingTab(),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const EditSettingTab(),
+                        //   ),
+                        // );
                       },
                     ),
 
