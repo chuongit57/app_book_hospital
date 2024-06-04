@@ -2,16 +2,20 @@ class DTODoctor {
   final int doctorId;
   final String name;
   final String degree;
+  final String email;
   final String phoneNumber;
   final String department;
+  final String gender;
   final String examination_hours;
 
   DTODoctor({
     required this.doctorId,
     required this.name,
     required this.degree,
+    required this.email,
     required this.phoneNumber,
     required this.department,
+    required this.gender,
     required this.examination_hours,
   });
 

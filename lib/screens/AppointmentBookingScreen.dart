@@ -167,14 +167,22 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
   }
 
   void _pickDate() async {
+    DateTime now = DateTime.now();
+    DateTime firstDate = now.subtract(Duration(days: now.weekday - 1)); // Monday of this week
+    DateTime lastDate = firstDate.add(Duration(days: 4)); // Friday of this week
+
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
+      initialDate: _selectedDate ?? now,
+      firstDate: now, // Prevents selecting past days
+      lastDate: lastDate,
+      selectableDayPredicate: (DateTime date) {
+        // Only allow weekdays (Monday to Friday) and days from today onward
+        return date.weekday != DateTime.saturday && date.weekday != DateTime.sunday;
+      },
     );
 
-    if (pickedDate != null) {
+    if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
         _selectedDate = pickedDate;
       });
@@ -216,3 +224,5 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
     }
   }
 }
+
+void main() => runApp(MaterialApp(home: AppointmentBookingScreen()));

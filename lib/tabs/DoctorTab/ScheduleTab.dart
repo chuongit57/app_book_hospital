@@ -34,7 +34,7 @@ class _ScheduleTabState extends State<ScheduleTab> {
   @override
   void initState() {
     super.initState();
-    if (widget.statusSchedule == 'Lịch hẹn') {
+    if (widget.statusSchedule == 'Hoàn thành') {
       status = FilterStatus.Complete;
       _alignment = Alignment.center;
     }

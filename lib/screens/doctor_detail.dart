@@ -1,6 +1,8 @@
 import 'package:app_medicine/model/DTODoctor.dart';
 import 'package:app_medicine/screens/AppointmentBookingScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latLng;
 import '../styles/colors.dart';
@@ -12,7 +14,6 @@ class SliverDoctorDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DTODoctorDetail data = ModalRoute.of(context)?.settings.arguments as DTODoctorDetail;
-    print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxdata ${data}");
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -56,15 +57,54 @@ class DetailBody extends StatelessWidget {
           SizedBox(height: 15),
           DoctorInfo(data: data),
           SizedBox(height: 30),
-          SectionTitle(title: 'Chi tiết về bác sĩ'),
+          SectionTitle(title: 'Thông tin liên hệ'),
           SizedBox(height: 10),
-          Text(
-            data.doctor?.phoneNumber ?? 'Không có thông tin',
-            style: TextStyle(
-              color: Color(MyColors.purple01),
-              fontWeight: FontWeight.w500,
-              height: 1.5,
-            ),
+
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    'Số điện thoại: ',
+                    style: TextStyle(
+                      color: Color(MyColors.purple01),
+                      fontWeight: FontWeight.w500,
+                      height: 1.5,
+                    ),
+                  ),
+                  Text(
+                    data.doctor?.phoneNumber ?? 'Không có thông tin',
+                    style: TextStyle(
+                      color: Color(MyColors.purple01),
+                      fontWeight: FontWeight.w500,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.0), // khoảng cách giữa số điện thoại và email
+              Row(
+                children: [
+                  Text(
+                    'Email: ',
+                    style: TextStyle(
+                      color: Color(MyColors.purple01),
+                      fontWeight: FontWeight.w500,
+                      height: 1.5,
+                    ),
+                  ),
+                  Text(
+                    data.doctor?.email ?? 'Không có thông tin',
+                    style: TextStyle(
+                      color: Color(MyColors.purple01),
+                      fontWeight: FontWeight.w500,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
           SizedBox(height: 25),
           SectionTitle(title: 'Chuyên khoa'),
@@ -253,7 +293,9 @@ class DetailDoctorCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.asset(
-                'lib/assets/doctor2.png',
+                data.doctor?.gender == "Nam"
+                    ? 'lib/assets/doctor2.png'
+                    : 'lib/assets/doctor_woman.jpg',
                 width: 80,
               ),
             ),

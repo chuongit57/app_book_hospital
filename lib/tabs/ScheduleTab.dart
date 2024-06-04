@@ -28,13 +28,13 @@ class _ScheduleTabState extends State<ScheduleTab> {
 
   late List<Department> _departments = [];
 
-  final List<String> _dates = [
-    'Tất cả',
-    'Thứ 2, 13 tháng 5',
-    'Thứ 3, 14 tháng 5',
-    'Thứ 4, 15 tháng 5',
-    'Thứ 5, 16 tháng 5',
-  ];
+  // final List<String> _dates = [
+  //   'Tất cả',
+  //   'Thứ 2, 13 tháng 5',
+  //   'Thứ 3, 14 tháng 5',
+  //   'Thứ 4, 15 tháng 5',
+  //   'Thứ 5, 16 tháng 5',
+  // ];
 
   @override
   void initState() {
@@ -160,22 +160,22 @@ class _ScheduleTabState extends State<ScheduleTab> {
               },
             ),
             SizedBox(height: 20),
-            DropdownButton<String>(
-              value: _selectedDate,
-              hint: Text('Chọn ngày khám'),
-              isExpanded: true,
-              items: _dates.map((String date) {
-                return DropdownMenuItem<String>(
-                  value: date,
-                  child: Text(date),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedDate = newValue;
-                });
-              },
-            ),
+            // DropdownButton<String>(
+            //   value: _selectedDate,
+            //   hint: Text('Chọn ngày khám'),
+            //   isExpanded: true,
+            //   items: _dates.map((String date) {
+            //     return DropdownMenuItem<String>(
+            //       value: date,
+            //       child: Text(date),
+            //     );
+            //   }).toList(),
+            //   onChanged: (String? newValue) {
+            //     setState(() {
+            //       _selectedDate = newValue;
+            //     });
+            //   },
+            // ),
             SizedBox(height: 20),
             Expanded(
               child: ListView.builder(

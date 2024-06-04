@@ -131,11 +131,13 @@ class _HomeTabState extends State<HomeTab> {
                             doctorId: 1,
                             name: doctor.name,
                             degree: doctor.degree,
-                            phoneNumber: "phoneNumber",
+                            phoneNumber: doctor.phone,
+                            email: doctor.email,
                             department: doctor.department.name,
-                            examination_hours: "examination_hours");
+                            examination_hours: "08:00 - 17:00",
+                            gender: '');
                         return TopDoctorCard(
-                          img: 'lib/assets/doctor2.png', // Replace with actual image path
+                          img: doctor.gender == "Nam"?'lib/assets/doctor2.png':'lib/assets/doctor_woman.jpg', // Replace with actual image path
                           data: dtoDoctor,
                         );
                       },

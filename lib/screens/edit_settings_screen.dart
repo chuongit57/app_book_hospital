@@ -36,7 +36,9 @@ class _EditSettingTabState extends State<EditSettingTab> {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                print("Button lưu thông tin bệnh nhân vào database");
+              },
               style: IconButton.styleFrom(
                 backgroundColor: Colors.lightBlueAccent,
                 shape: RoundedRectangleBorder(
@@ -187,43 +189,53 @@ class _EditSettingTabState extends State<EditSettingTab> {
                 ),
               ),
               const SizedBox(height: 20),
-              EditItem(
+              const EditItem(
                 title: "Tiền sử bệnh",
-                widget: DropdownButtonFormField<String>(
-                  value: mediaHistory,
-                  hint: const Text('Tiền sử bệnh'),
-                  decoration: const InputDecoration(
+                widget: TextField(
+                  decoration: InputDecoration(
                     border: OutlineInputBorder(),
+                    hintText: 'Nhập tiền sử bệnh của bạn',
                   ),
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'khong',
-                      child: Text('Không'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'diung',
-                      child: Text('Dị ứng'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'caohuyetap',
-                      child: Text('Cao huyết áp'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'timmach',
-                      child: Text('Tim mạch'),
-                    ),
-                    DropdownMenuItem(
-                      value: 'gan',
-                      child: Text('Gan'),
-                    ),
-                  ],
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      mediaHistory = newValue;
-                    });
-                  },
                 ),
               ),
+              // const SizedBox(height: 20),
+              // EditItem(
+              //   title: "Tiền sử bệnh",
+              //   widget: DropdownButtonFormField<String>(
+              //     value: mediaHistory,
+              //     hint: const Text('Tiền sử bệnh'),
+              //     decoration: const InputDecoration(
+              //       border: OutlineInputBorder(),
+              //     ),
+              //     items: const [
+              //       DropdownMenuItem(
+              //         value: 'khong',
+              //         child: Text('Không'),
+              //       ),
+              //       DropdownMenuItem(
+              //         value: 'diung',
+              //         child: Text('Dị ứng'),
+              //       ),
+              //       DropdownMenuItem(
+              //         value: 'caohuyetap',
+              //         child: Text('Cao huyết áp'),
+              //       ),
+              //       DropdownMenuItem(
+              //         value: 'timmach',
+              //         child: Text('Tim mạch'),
+              //       ),
+              //       DropdownMenuItem(
+              //         value: 'gan',
+              //         child: Text('Gan'),
+              //       ),
+              //     ],
+              //     onChanged: (String? newValue) {
+              //       setState(() {
+              //         mediaHistory = newValue;
+              //       });
+              //     },
+              //   ),
+              // ),
             ],
           ),
         ),

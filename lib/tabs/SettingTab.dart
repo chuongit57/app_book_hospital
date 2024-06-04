@@ -52,7 +52,7 @@ class _SettingTabState extends State<SettingTab> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Nguyễn Anh Tuấn",
+                          "Đặng Văn Chương",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
@@ -64,12 +64,12 @@ class _SettingTabState extends State<SettingTab> {
                     const Spacer(),
                     ForwardButton(
                       onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const EditSettingTab(),
-                        //   ),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditSettingTab(),
+                          ),
+                        );
                       },
                     ),
 
