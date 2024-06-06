@@ -11,7 +11,7 @@ import 'package:app_medicine/widgets/error_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../home.dart';
+import '../user/home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

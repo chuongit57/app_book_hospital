@@ -7,5 +7,9 @@ class AppConstant {
   static const String DEPARTMENT_GET_ALL = BASE_URL + "/app_doctor/api/department/all";
   static const String DEPARTMENT_SELECT = BASE_URL + "/app_doctor/api/department/select-department";
 
-  static const String DOCTOR_LIST_DOCTOR_TOP = BASE_URL + "/app_doctor/api/doctor/all";
+  static const String DOCTOR_LIST_DOCTOR_TOP = BASE_URL + "/app_doctor/api/doctor/top-5-doctor";
+
+  static const String DOCTOR_APPOINTMENT_SIGN_UP = BASE_URL + "/app_doctor/api/doctor-appointment/sign-up";
+
+  static const String USER_BOOK_BOOK = BASE_URL + "/app_doctor/api/user_book/book";
 }

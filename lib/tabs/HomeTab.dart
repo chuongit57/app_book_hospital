@@ -130,15 +130,20 @@ class _HomeTabState extends State<HomeTab> {
                         var dtoDoctor = DTODoctor(
                             doctorId: 1,
                             name: doctor.name,
+                            year_Of_Birth: int.parse(doctor.yearOfBirth),
                             degree: doctor.degree,
                             phoneNumber: doctor.phone,
                             email: doctor.email,
+                            adress: doctor.address,
                             department: doctor.department.name,
                             examination_hours: "08:00 - 17:00",
-                            gender: '');
+                            gender: doctor.gender,
+                            number_of_start: doctor.numberOfStars,
+                        );
                         return TopDoctorCard(
                           img: doctor.gender == "Nam"?'lib/assets/doctor2.png':'lib/assets/doctor_woman.jpg', // Replace with actual image path
                           data: dtoDoctor,
+                          doctor: doctor
                         );
                       },
                     );
@@ -156,16 +161,18 @@ class _HomeTabState extends State<HomeTab> {
 class TopDoctorCard extends StatelessWidget {
   final String img;
   final DTODoctor? data;
+  final Doctor? doctor;
 
   TopDoctorCard({
     required this.img,
     required this.data,
+    required this.doctor,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (data == null) {
-      return SizedBox();
+    if (data == null || doctor == null) {
+      return const SizedBox();
     }
 
     return Container(
@@ -240,7 +247,7 @@ class TopDoctorCard extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      '4.3 - 51 đánh giá',
+                      '${doctor?.numberOfStars} - 84 đánh giá',
                       style: TextStyle(color: Color(MyColors.grey02)),
                     )
                   ],

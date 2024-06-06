@@ -10,6 +10,8 @@ class Doctor {
   final dynamic gender;
   final dynamic degree;
   final Department department;
+  final dynamic numberOfStars;
+
 
   Doctor(
       {required this.code,
@@ -20,7 +22,8 @@ class Doctor {
         required this.email,
         required this.gender,
         required this.degree,
-        required this.department,});
+        required this.department,
+        required this.numberOfStars});
 
   factory Doctor.fromJson(Map<String, dynamic> json) {
     return Doctor(
@@ -33,6 +36,21 @@ class Doctor {
       gender: json['gender'],
       degree: json['degree'],
       department: Department(code: json['department']['code'], name: json['department']['name']),
+      numberOfStars: json['numberOfStars'],
     );
   }
+
+
+  // Method to convert User to JSON
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'id': id,
+  //     'firstname': firstname,
+  //     'lastname': lastname,
+  //     'email': email,
+  //     'password': password,
+  //     'role': role.toString().split('.').last,
+  //     'tokens': tokens,
+  //   };
+  // }
 }

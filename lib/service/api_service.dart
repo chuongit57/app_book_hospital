@@ -9,7 +9,7 @@ class ApiService {
   }
 
   static Future<http.Response> getToken(url) async {
-    final secureStorage = FlutterSecureStorage();
+    const secureStorage = FlutterSecureStorage();
     String? token = await secureStorage.read(key: 'token');
     final response = await http.get(
       Uri.parse(url),
@@ -25,6 +25,20 @@ class ApiService {
     final response = await http.post(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
+      body: jsonEncode(body),
+    );
+    return response;
+  }
+
+  static Future<http.Response> postToken(String url, Map<String, dynamic> body) async {
+    const secureStorage = FlutterSecureStorage();
+    String? token = await secureStorage.read(key: 'token');
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json; charset=utf-8',
+      },
       body: jsonEncode(body),
     );
     return response;

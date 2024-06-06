@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../screens/AppointmentBookingScreen.dart';
 import '../screens/auth/login.dart';
 import '../screens/doctor_detail.dart';
-import '../screens/home.dart';
+import '../screens/user/home.dart';
 
 Map<String, Widget Function(BuildContext)> routes = {
   '/': (context) => const AuthCheckWidget(child: Home()),
