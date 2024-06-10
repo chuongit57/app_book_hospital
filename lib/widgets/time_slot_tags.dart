@@ -1,30 +1,16 @@
 import 'package:app_medicine/model/appointment.dart';
+import 'package:app_medicine/utils/date_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
-class TimeSlot {
-  final TimeOfDay startTime;
-  final TimeOfDay endTime;
-  final bool isRegister;
-  final bool isFree;
-
-  TimeSlot({
-    required this.startTime,
-    required this.endTime,
-    required this.isRegister,
-    required this.isFree,
-  });
-}
 
 class TimeSlotTags extends StatelessWidget {
   final List<Appointment> appointments;
   final Function(Appointment) onTimeSlotSelected;
 
   const TimeSlotTags({
-    Key? key,
+    super.key,
     required this.appointments,
     required this.onTimeSlotSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,22 +37,17 @@ class TimeSlotChip extends StatefulWidget {
   final VoidCallback onPressed;
 
   const TimeSlotChip({
-    Key? key,
+    super.key,
     required this.appointment,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
-  _TimeSlotChipState createState() => _TimeSlotChipState();
+  State<TimeSlotChip>createState() => _TimeSlotChipState();
 }
 
 class _TimeSlotChipState extends State<TimeSlotChip> {
   bool isSelected = false; // Track the selection state
-
-  String _formatTime(String time) {
-    final DateTime dateTime = DateFormat('HH:mm:ss').parse(time);
-    return DateFormat('HH:mm').format(dateTime);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +78,7 @@ class _TimeSlotChipState extends State<TimeSlotChip> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         onPressed: widget.onPressed,
         child: Text(
-          '${_formatTime(widget.appointment.startTime)} - ${_formatTime(widget.appointment.endTime)}',
+          DateUtil.formatTimeRange(widget.appointment.startTime, widget.appointment.endTime),
           style: const TextStyle(
             color: Colors.white
           ),

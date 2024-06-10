@@ -130,15 +130,12 @@ class _HomeTabState extends State<HomeTab> {
                         var dtoDoctor = DTODoctor(
                             doctorId: 1,
                             name: doctor.name,
-                            year_Of_Birth: int.parse(doctor.yearOfBirth),
                             degree: doctor.degree,
                             phoneNumber: doctor.phone,
                             email: doctor.email,
-                            adress: doctor.address,
                             department: doctor.department.name,
                             examination_hours: "08:00 - 17:00",
                             gender: doctor.gender,
-                            number_of_start: doctor.numberOfStars,
                         );
                         return TopDoctorCard(
                           img: doctor.gender == "Nam"?'lib/assets/doctor2.png':'lib/assets/doctor_woman.jpg', // Replace with actual image path
@@ -247,7 +244,7 @@ class TopDoctorCard extends StatelessWidget {
                       width: 5,
                     ),
                     Text(
-                      '${doctor?.numberOfStars} - 84 đánh giá',
+                      '${doctor?.numberOfStars} - 51 đánh giá',
                       style: TextStyle(color: Color(MyColors.grey02)),
                     )
                   ],

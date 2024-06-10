@@ -1,4 +1,4 @@
-import 'package:http/http.dart' as http;
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -18,11 +18,5 @@ class DoctorService {
       throw Exception('Failed to getListDoctorTop');
     }
   }
-
-  // Future<http.Response> addNewDoctor(Doctor doctor) async {
-  //   // call api signUp
-  //   final response = await ApiService.post(AppConstant.SIGN_UP_URL, doctor.toJson());
-  //   return response;
-  // }
 
 }

@@ -1,9 +1,8 @@
-import 'package:app_medicine/model/user.dart';
+import 'package:app_medicine/tabs/AdminTab/SettingTab.dart';
 import 'package:flutter/material.dart';
 import '../styles/colors.dart';
-import '../tabs/AdminTab/AdminTab.dart';
-import '../tabs/AdminTab/SettingTab.dart';
-
+import '../tabs/AdminTab/DoctorManageTab.dart';
+import '../tabs/AdminTab/PatientManageTab.dart';
 
 class Admin extends StatefulWidget {
   const Admin({Key? key}) : super(key: key);
@@ -13,27 +12,29 @@ class Admin extends StatefulWidget {
 }
 
 List<Map> navigationBarItems = [
-  {'icon': Icons.admin_panel_settings, 'index': 0},
-  {'icon': Icons.account_balance, 'index': 1},
+  {'icon': Icons.add_task, 'index': 0},
+  {'icon': Icons.add_task, 'index': 1},
+  {'icon': Icons.manage_accounts, 'index': 2},
 ];
-
 
 class _AdminState extends State<Admin> {
   int _selectedIndex = 0;
   String statusSchedule = '';
 
-  get user => null;
   void goToSchedule() {
     setState(() {
       _selectedIndex = 1;
     });
+    setState(() {
+      statusSchedule = 'Lịch hẹn';
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
     List<Widget> screens = [
       AdminDoctorScreen(),
+      AdminPatientScreen(),
       SettingTab(),
     ];
 

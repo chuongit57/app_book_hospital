@@ -191,7 +191,7 @@ class DoctorInfo extends StatelessWidget {
         SizedBox(width: 15),
         NumberCard(label: 'Kinh nghiệm', value: data.doctor?.experience ?? 'Không có thông tin'),
         SizedBox(width: 15),
-        NumberCard(label: 'Đánh giá', value: data.doctor?.number_of_start.toString() ?? 'Không có thông tin'),
+        NumberCard(label: 'Đánh giá', value: data.doctor?.rating ?? 'Không có thông tin'),
       ],
     );
   }

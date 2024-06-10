@@ -39,18 +39,4 @@ class Doctor {
       numberOfStars: json['numberOfStars'],
     );
   }
-
-
-  // Method to convert User to JSON
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'id': id,
-  //     'firstname': firstname,
-  //     'lastname': lastname,
-  //     'email': email,
-  //     'password': password,
-  //     'role': role.toString().split('.').last,
-  //     'tokens': tokens,
-  //   };
-  // }
 }

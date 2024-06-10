@@ -1,5 +1,4 @@
 import 'package:app_medicine/enum/app_enum.dart';
-import 'package:app_medicine/model/user.dart';
 import 'package:app_medicine/tabs/SettingTab.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +16,7 @@ class Home extends StatefulWidget {
 List<Map> navigationBarItems = [
   {'icon': Icons.local_hospital, 'index': 0},
   {'icon': Icons.calendar_today, 'index': 1},
-  {'icon': Icons.account_balance, 'index': 2},
+  {'icon': Icons.manage_accounts, 'index': 2},
 ];
 
 
@@ -37,7 +36,7 @@ class _HomeState extends State<Home> {
       HomeTab(
         onPressedScheduleCard: goToSchedule,
       ),
-      const ScheduleTab(
+      const DoctorAppointmentScreen(
         scheduleUserStatus: ScheduleUserStatus.SIGN_UP,
       ),
       const SettingTab(),

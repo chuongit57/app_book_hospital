@@ -17,7 +17,19 @@ class UserBookService {
     final response = await ApiService.postToken(AppConstant.USER_BOOK_BOOK, body);
     if (response.statusCode == HttpStatus.ok) {
     } else {
-      throw Exception('Failed to getDoctorAppointmentSignUp');
+      throw Exception(response.body);
+    }
+  }
+
+  Future<void> removeBook(int? id, Map<String, dynamic> body) async {
+    if (id != null) {
+      body['doctorAppointmentId'] = id;
+    }
+
+    final response = await ApiService.postToken(AppConstant.USER_BOOK_REMOVE_BOOK, body);
+    if (response.statusCode == HttpStatus.ok) {
+    } else {
+      throw Exception(response.body);
     }
   }
 

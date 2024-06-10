@@ -10,6 +10,10 @@ class AppConstant {
   static const String DOCTOR_LIST_DOCTOR_TOP = BASE_URL + "/app_doctor/api/doctor/top-5-doctor";
 
   static const String DOCTOR_APPOINTMENT_SIGN_UP = BASE_URL + "/app_doctor/api/doctor-appointment/sign-up";
+  static const String DOCTOR_APPOINTMENT_DONE = BASE_URL + "/app_doctor/api/doctor-appointment/done";
 
   static const String USER_BOOK_BOOK = BASE_URL + "/app_doctor/api/user_book/book";
+  static const String USER_BOOK_REMOVE_BOOK = BASE_URL + "/app_doctor/api/user_book/remove-book";
+
+  static const String BLOODGROUP_GET_ALL = BASE_URL + "/app_doctor/api/bloodgroup/get-all-bloodgroup";
 }

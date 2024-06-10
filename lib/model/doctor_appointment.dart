@@ -12,7 +12,6 @@ class DoctorAppointment {
   final Department department;
   final String degree;
   final double numberOfStars;
-  final int id;
   final List<Appointment> appointments;
 
   DoctorAppointment({
@@ -26,7 +25,6 @@ class DoctorAppointment {
     required this.department,
     required this.degree,
     required this.numberOfStars,
-    required this.id,
     required this.appointments,
   });
 
@@ -42,7 +40,6 @@ class DoctorAppointment {
       department: Department.fromJson(json['department']),
       degree: json['degree'],
       numberOfStars: json['numberOfStars'].toDouble(),
-      id: json['id'].toInt(),
       appointments: (json['appointments'] as List)
           .map((appointment) => Appointment.fromJson(appointment))
           .toList(),

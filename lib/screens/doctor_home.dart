@@ -1,9 +1,10 @@
+import 'package:app_medicine/enum/app_enum.dart';
+import 'package:app_medicine/screens/doctor/doctor_schedule.dart';
 import 'package:app_medicine/tabs/Report/ReportDoctor.dart';
 import 'package:app_medicine/tabs/SettingTab.dart';
 import 'package:flutter/material.dart';
 
 import '../styles/colors.dart';
-import '../tabs/DoctorTab/ScheduleTab.dart';
 
 class DoctorHome extends StatefulWidget {
   const DoctorHome({Key? key}) : super(key: key);
@@ -13,9 +14,10 @@ class DoctorHome extends StatefulWidget {
 }
 
 List<Map> navigationBarItems = [
-  {'icon': Icons.calendar_today, 'index': 0},
-  {'icon': Icons.report, 'index': 1},
-  {'icon': Icons.account_balance, 'index': 2},
+  {'icon': Icons.chat, 'index': 0},
+  {'icon': Icons.calendar_today, 'index': 1},
+  {'icon': Icons.report, 'index': 2},
+  {'icon': Icons.manage_accounts, 'index': 3},
 ];
 
 class _HomeState extends State<DoctorHome> {
@@ -33,7 +35,7 @@ class _HomeState extends State<DoctorHome> {
   @override
   Widget build(BuildContext context) {
     List<Widget> screens = [
-      ScheduleTab(statusSchedule: statusSchedule),
+      DoctorScheduleScreen(scheduleDoctorStatus: ScheduleDoctorStatus.COMING),
       ReportDoctor(),
       SettingTab(),
     ];

@@ -1,6 +1,32 @@
-import 'package:app_medicine/model/DTODoctor.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+class DTODoctor {
+  final int doctorId;
+  final String name;
+  final int year_Of_Birth;
+  final String degree;
+  final String email;
+  final String phoneNumber;
+  final String adress;
+  final String department;
+  final String gender;
+  final String examination_hours;
+  final double number_of_start;
+
+  DTODoctor({
+    required this.doctorId,
+    required this.name,
+    required this.year_Of_Birth,
+    required this.degree,
+    required this.email,
+    required this.phoneNumber,
+    required this.adress,
+    required this.department,
+    required this.gender,
+    required this.examination_hours,
+    required this.number_of_start,
+  });
+}
 
 class AdminDoctorScreen extends StatefulWidget {
   @override
@@ -42,6 +68,8 @@ class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
     _phoneNumberController.dispose();
     _adressController.dispose();
     _examinationHoursController.dispose();
+    _numberOfStart.dispose();
+    _yearOfBirthController.dispose();
     super.dispose();
   }
 
@@ -217,7 +245,7 @@ class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
                       });
                     },
                   ),
-                  _buildTextFormField(_phoneNumberController, 'Đánh giá'),
+                  _buildTextFormField(_numberOfStart, 'Đánh giá'),
                 ],
               ),
             ),
@@ -357,7 +385,7 @@ class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
     setState(() {
       _editingDoctorId = doctor.doctorId;
       _nameController.text = doctor.name;
-      _yearOfBirthController.text = doctor.year_Of_Birth as String;
+      _yearOfBirthController.text = doctor.year_Of_Birth.toString(); // Chuyển đổi sang String
       _selectedDegree = doctor.degree;
       _emailController.text = doctor.email;
       _phoneNumberController.text = doctor.phoneNumber;
@@ -365,7 +393,7 @@ class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
       _selectedDepartment = doctor.department;
       _selectedGender = doctor.gender;
       _examinationHoursController.text = doctor.examination_hours;
-      _numberOfStart.text = doctor.number_of_start as String;
+      _numberOfStart.text = doctor.number_of_start.toString(); // Chuyển đổi sang String
     });
     _showDoctorForm();
   }

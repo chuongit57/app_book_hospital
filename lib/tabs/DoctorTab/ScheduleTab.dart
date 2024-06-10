@@ -1,4 +1,3 @@
-import 'package:app_medicine/data_fake/schedule_patient.dart';
 import 'package:app_medicine/model/filter_status.dart';
 import 'package:app_medicine/model/patients.dart';
 import 'package:app_medicine/screens/AppointmentBookingScreen.dart';
@@ -42,11 +41,6 @@ class _ScheduleTabState extends State<ScheduleTab> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map> filteredSchedules = schedule_patient.where((var patients) {
-      return patients['status'] == status &&
-          (_selectedDate == null || _selectedDate == 'Tất cả' || patients['reservedDate'] == _selectedDate);
-    }).toList();
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(left: 30, top: 30, right: 30),
@@ -140,94 +134,6 @@ class _ScheduleTabState extends State<ScheduleTab> {
               },
             ),
             SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredSchedules.length,
-                itemBuilder: (context, index) {
-                  var _schedule = filteredSchedules[index];
-                  bool isLastElement = filteredSchedules.length + 1 == index;
-                  var textButton = filteredSchedules[index]['status'] == FilterStatus.Upcoming
-                      ? 'Hủy Lịch hẹn'
-                      : filteredSchedules[index]['status'] == FilterStatus.Complete
-                      ? 'Hủy bỏ'
-                      : 'Xóa';
-                  return Card(
-                    margin: !isLastElement ? EdgeInsets.only(bottom: 20) : EdgeInsets.zero,
-                    child: Padding(
-                      padding: EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundImage: AssetImage(_schedule['img']),
-                              ),
-                              SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _schedule['patientName'],
-                                    style: TextStyle(
-                                      color: Color(MyColors.header01),
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    'Bệnh nhân',
-                                    style: TextStyle(
-                                      color: Color(MyColors.grey02),
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 15),
-                          DateTimeCard(
-                            reservedDate: _schedule['reservedDate'],
-                            reservedTime: _schedule['reservedTime'],
-                          ),
-                          SizedBox(height: 15),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: OutlinedButton(
-                                  child: Text('Chi tiết'),
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/patientDetail', arguments: filteredSchedules[index]);
-                                  },
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              Expanded(
-                                child: ElevatedButton(
-                                  child: Text(textButton),
-                                  onPressed: () {
-                                    if (status == FilterStatus.Complete) {
-                                      _showCancelConfirmationDialog(context, _schedule);
-                                    } else if (status == FilterStatus.Complete) {
-                                      _deleteSchedule(_schedule);
-                                    } else {
-                                      _showCancelConfirmationDialog(context, _schedule);
-                                    }
-                                  },
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
           ],
         ),
       ),
@@ -293,7 +199,6 @@ class _ScheduleTabState extends State<ScheduleTab> {
 
   void _deleteSchedule(Map schedule) {
     setState(() {
-      schedule_patient.remove(schedule);
     });
   }
 }

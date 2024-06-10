@@ -11,3 +11,16 @@ TextStyle kFilterStyle = TextStyle(
   color: Color(MyColors.bg02),
   fontWeight: FontWeight.w500,
 );
+
+
+const kTitleStyl = TextStyle(
+  fontSize: 24,
+  fontWeight: FontWeight.bold,
+  color: Colors.black,
+);
+
+const kFilterStyl = TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  color: Colors.grey,
+);
