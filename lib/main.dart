@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       builder: fixTextScale,
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/doctor',
       routes: routes,
     );
   }

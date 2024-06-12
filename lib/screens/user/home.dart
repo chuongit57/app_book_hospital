@@ -1,10 +1,10 @@
 import 'package:app_medicine/enum/app_enum.dart';
+import 'package:app_medicine/screens/user/doctor_appointment.dart';
 import 'package:app_medicine/tabs/SettingTab.dart';
 import 'package:flutter/material.dart';
 
 import '../../styles/colors.dart';
 import '../../tabs/HomeTab.dart';
-import 'doctor_appointment.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
 List<Map> navigationBarItems = [
   {'icon': Icons.local_hospital, 'index': 0},
   {'icon': Icons.calendar_today, 'index': 1},
-  {'icon': Icons.manage_accounts, 'index': 2},
+  {'icon': Icons.account_balance, 'index': 2},
 ];
 
 
@@ -28,7 +28,6 @@ class _HomeState extends State<Home> {
       _selectedIndex = 1;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {

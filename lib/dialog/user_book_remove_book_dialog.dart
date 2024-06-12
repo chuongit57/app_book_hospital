@@ -104,8 +104,8 @@ class _UserBookRemoveBookDialogState extends State<UserBookRemoveBookDialog> {
               children: [
                 TextFormField(
                   controller: _ageController,
-                  decoration: InputDecoration(labelText: 'Tên'),
-                  keyboardType: TextInputType.name,
+                  decoration: InputDecoration(labelText: 'Tuổi'),
+                  keyboardType: TextInputType.number,
                 ),
                 TextFormField(
                   controller: _phoneController,
@@ -114,7 +114,7 @@ class _UserBookRemoveBookDialogState extends State<UserBookRemoveBookDialog> {
                 ),
                 TextFormField(
                   controller: _weightController,
-                  decoration: InputDecoration(labelText: 'Tuổi'),
+                  decoration: InputDecoration(labelText: 'Chiều cao'),
                   keyboardType: TextInputType.number,
                 ),
               ],

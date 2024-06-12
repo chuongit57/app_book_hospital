@@ -5,7 +5,7 @@ import 'package:app_medicine/model/role.dart';
 import 'package:app_medicine/model/user.dart';
 import 'package:app_medicine/screens/Admin.dart';
 import 'package:app_medicine/screens/auth/signup.dart';
-import 'package:app_medicine/screens/doctor_home.dart';
+import 'package:app_medicine/screens/doctor/doctor_home.dart';
 import 'package:app_medicine/service/auth_service.dart';
 import 'package:app_medicine/widgets/error_alert.dart';
 import 'package:flutter/material.dart';

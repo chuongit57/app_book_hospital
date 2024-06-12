@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../component/appointment_time_card.dart';
 import '../../model/doctor_appointment_done_response.dart';
 import '../../service/doctor_appointment_service.dart';
 import '../../service/user_book_service.dart';
 import '../../styles/colors.dart';
-import '../../utils/date_utils.dart';
 import '../../utils/toast_utils.dart';
 
 class DoctorAppointmentDoneTab extends StatefulWidget {
@@ -21,34 +21,32 @@ class _DoctorAppointmentDoneTabState extends State<DoctorAppointmentDoneTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child:
-        Stack(
+    return Expanded(
+        child: Stack(
           children: [
-            Expanded(
-              child: FutureBuilder<List<DoctorAppointmentDoneResponse>>(
-                future: _fetchLstDoctorAppointmentDone(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (snapshot.hasData) {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return AppointmentInfoCard(
-                          doctorAppointmentDone: snapshot.data![index],
-                          onDelete: _handleDelete,
-                        );
-                      },
-                    );
-                  } else {
-                    return const Center(child: Text('No data available'));
-                  }
-                },
-              ),
+            FutureBuilder<List<DoctorAppointmentDoneResponse>>(
+              future: _fetchLstDoctorAppointmentDone(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return AppointmentInfoCard(
+                        doctorAppointmentDone: snapshot.data![index],
+                        onDelete: _handleDelete,
+                      );
+                    },
+                  );
+                } else {
+                  return const Center(child: Text('No data available'));
+                }
+              },
             ),
             if (_isLoading)
               Container(
@@ -58,7 +56,7 @@ class _DoctorAppointmentDoneTabState extends State<DoctorAppointmentDoneTab> {
                 ),
               ),
           ],
-        )
+        ),
     );
   }
 
@@ -163,12 +161,12 @@ class AppointmentInfoCard extends StatelessWidget {
                                     },
                                   );
                                 },
+                                style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(color: Colors.white),
+                                ),
                                 child: const Icon(
                                   Icons.delete_forever_outlined,
                                   color: Colors.white,
-                                ),
-                                style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(color: Colors.white),
                                 ),
                               ),
                             ],
@@ -176,7 +174,7 @@ class AppointmentInfoCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     AppointmentTimeCard(
                       date: doctorAppointmentDone.date,
                       endTime: doctorAppointmentDone.endTime,
@@ -194,15 +192,28 @@ class AppointmentInfoCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            children: const [
-                              Text(
+                            children: [
+                              const Text(
                                 'Tên bệnh nhân: ',
                                 style: TextStyle(color: Colors.white),
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               Text(
-                                'Nguyễn Văn A',
+                                doctorAppointmentDone.name == null ? '' : '${doctorAppointmentDone.name}',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Text(
+                                'Giới tính: ',
                                 style: TextStyle(color: Colors.white),
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                doctorAppointmentDone.gender == null ? '' : '${doctorAppointmentDone.gender}',
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ],
                           ),
@@ -214,7 +225,7 @@ class AppointmentInfoCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                doctorAppointmentDone.phone.toString(),
+                                doctorAppointmentDone.phone == null ? '' : '${doctorAppointmentDone.phone}',
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ],
@@ -227,7 +238,7 @@ class AppointmentInfoCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                doctorAppointmentDone.age.toString(),
+                                doctorAppointmentDone.age == null ? '' : '${doctorAppointmentDone.age}',
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ],
@@ -240,7 +251,20 @@ class AppointmentInfoCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                '${doctorAppointmentDone.weight} kg',
+                                doctorAppointmentDone.weight == null ? '' : '${doctorAppointmentDone.weight} kg',
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Text(
+                                'Chiều cao: ',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                doctorAppointmentDone.height == null ? '' : '${doctorAppointmentDone.height} cm',
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ],
@@ -283,58 +307,3 @@ class AppointmentInfoCard extends StatelessWidget {
   }
 }
 
-class AppointmentTimeCard extends StatelessWidget {
-  final TimeOfDay startTime;
-  final TimeOfDay endTime;
-  final DateTime date;
-
-  const AppointmentTimeCard({
-    super.key,
-    required this.startTime,
-    required this.endTime,
-    required this.date,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    String dateFormat = DateUtil.formatDateVN(date);
-    String timeFormat = DateUtil.formatTimeRange(startTime, endTime);
-
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xFF4A4A58), // Assuming MyColors.bg01 is a hex value
-        borderRadius: BorderRadius.circular(10),
-      ),
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.calendar_today,
-            color: Colors.white,
-            size: 10,
-          ),
-          const SizedBox(width: 5),
-          Text(
-            dateFormat,
-            style: const TextStyle(color: Colors.white),
-          ),
-          const SizedBox(width: 10),
-          const Icon(
-            Icons.access_alarm,
-            color: Colors.white,
-            size: 17,
-          ),
-          const SizedBox(width: 5),
-          Flexible(
-            child: Text(
-              timeFormat,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

@@ -32,7 +32,6 @@ class DoctorAppointmentService {
   }
 
   Future<List<DoctorAppointmentDoneResponse>> getListDoctorAppointmentDone() async {
-
     final response = await ApiService.getToken(AppConstant.DOCTOR_APPOINTMENT_DONE);
     if (response.statusCode == HttpStatus.ok) {
       List jsonResponse = json.decode(utf8.decode(response.bodyBytes));

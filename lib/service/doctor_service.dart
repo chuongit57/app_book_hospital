@@ -18,5 +18,14 @@ class DoctorService {
       throw Exception('Failed to getListDoctorTop');
     }
   }
+  Future<List<Doctor>> getListDoctors() async {
+    final response = await ApiService.getToken(AppConstant.DOCTOR_LIST);
+    if (response.statusCode == HttpStatus.ok) {
+      List jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+      return jsonResponse.map((doctor) => Doctor.fromJson(doctor)).toList();
+    } else {
+      throw Exception('Failed to getListDoctorTop');
+    }
+  }
 
 }

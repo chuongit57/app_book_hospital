@@ -1,6 +1,7 @@
 import 'package:app_medicine/model/department.dart';
 
 class Doctor {
+  final dynamic doctorId;
   final dynamic code;
   final dynamic name;
   final dynamic yearOfBirth;
@@ -14,7 +15,8 @@ class Doctor {
 
 
   Doctor(
-      {required this.code,
+      {required this.doctorId,
+        required this.code,
         required this.name,
         required this.yearOfBirth,
         required this.address,
@@ -27,6 +29,7 @@ class Doctor {
 
   factory Doctor.fromJson(Map<String, dynamic> json) {
     return Doctor(
+      doctorId: json['id'],
       code: json['code'],
       name: json['name'],
       yearOfBirth: json['yearOfBirth'],

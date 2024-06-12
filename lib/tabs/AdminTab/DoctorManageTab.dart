@@ -1,4 +1,8 @@
+import 'package:app_medicine/model/department.dart';
+import 'package:app_medicine/model/doctor.dart';
 import 'package:flutter/material.dart';
+
+import '../../service/doctor_service.dart';
 
 class DTODoctor {
   final int doctorId;
@@ -34,8 +38,9 @@ class AdminDoctorScreen extends StatefulWidget {
 }
 
 class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
-  List<DTODoctor> doctors = [];
-  List<DTODoctor> filteredDoctors = [];
+  final doctorService = DoctorService();
+  List<Doctor> listDoctor = [];
+  List<Doctor> filteredDoctors = [];
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -53,11 +58,18 @@ class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
 
   List<Appointment> appointments = []; // Giả sử đây là danh sách các ca bệnh
 
+  Future<void> getListDoctor() async {
+    listDoctor = await doctorService.getListDoctors();
+    setState(() {
+      filteredDoctors = listDoctor;
+    });
+    _searchController.addListener(_filterDoctors);
+  }
+
   @override
   void initState() {
     super.initState();
-    filteredDoctors = doctors;
-    _searchController.addListener(_filterDoctors);
+    getListDoctor();
   }
 
   @override
@@ -76,9 +88,9 @@ class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
   void _filterDoctors() {
     setState(() {
       if (_searchController.text.isEmpty) {
-        filteredDoctors = doctors;
+        filteredDoctors = listDoctor;
       } else {
-        filteredDoctors = doctors.where((doctor) => doctor.name.toLowerCase().contains(_searchController.text.toLowerCase())).toList();
+        filteredDoctors = listDoctor.where((doctor) => doctor.name.toLowerCase().contains(_searchController.text.toLowerCase())).toList();
       }
     });
   }
@@ -110,9 +122,9 @@ class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Số ca bệnh trong ngày: $dayCount'),
-              Text('Số ca bệnh trong tuần: $weekCount'),
-              Text('Số ca bệnh trong tháng: $monthCount'),
+              Text('Số ca bệnh trong ngày: ${4}'),
+              Text('Số ca bệnh trong tuần: ${18}'),
+              Text('Số ca bệnh trong tháng: ${67}'),
             ],
           ),
           actions: [
@@ -332,45 +344,48 @@ class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
     );
   }
 
-  void _saveDoctor() {
+  void _saveDoctor() async {
     if (_formKey.currentState!.validate()) {
       if (_editingDoctorId == null) {
         // Thêm bác sĩ mới
-        final newDoctor = DTODoctor(
-          doctorId: DateTime.now().millisecondsSinceEpoch, // Tạo ID bằng timestamp
+        final newDoctor = Doctor(
+          doctorId: "",
+          code: "",
           name: _nameController.text,
-          year_Of_Birth: int.parse(_yearOfBirthController.text),
-          degree: _selectedDegree!,
+          yearOfBirth: int.parse(_yearOfBirthController.text),
+          address: _adressController.text,
+          phone: _phoneNumberController.text,
           email: _emailController.text,
-          phoneNumber: _phoneNumberController.text,
-          adress: _adressController.text,
-          department: _selectedDepartment!,
           gender: _selectedGender!,
-          examination_hours: _examinationHoursController.text,
-          number_of_start: double.parse(_numberOfStart.text),
+          degree: _selectedDegree!,
+          department: Department(code: "1", name: _selectedDepartment!),
+          numberOfStars: double.parse(_numberOfStart.text),
         );
+        // await doctorService.addDoctor(newDoctor); // Giả sử có phương thức addDoctor trong service
         setState(() {
-          doctors.add(newDoctor);
+          listDoctor.add(newDoctor);
           _filterDoctors(); // Cập nhật danh sách tìm kiếm
         });
       } else {
         // Cập nhật thông tin bác sĩ
-        final doctorIndex = doctors.indexWhere((doctor) => doctor.doctorId == _editingDoctorId);
+        final updatedDoctor = Doctor(
+          doctorId: _editingDoctorId!,
+          code: "",
+          name: _nameController.text,
+          yearOfBirth: int.parse(_yearOfBirthController.text),
+          address: _adressController.text,
+          phone: _phoneNumberController.text,
+          email: _emailController.text,
+          gender: _selectedGender!,
+          degree: _selectedDegree!,
+          department: Department(code: "1", name: _selectedDepartment!),
+          numberOfStars: double.parse(_numberOfStart.text),
+        );
+        // await doctorService.updateDoctor(updatedDoctor); // Gọi phương thức cập nhật trong service
+        final doctorIndex = listDoctor.indexWhere((doctor) => doctor.doctorId == _editingDoctorId);
         if (doctorIndex != -1) {
           setState(() {
-            doctors[doctorIndex] = DTODoctor(
-              doctorId: _editingDoctorId!,
-              name: _nameController.text,
-              year_Of_Birth: int.parse(_yearOfBirthController.text),
-              degree: _selectedDegree!,
-              email: _emailController.text,
-              phoneNumber: _phoneNumberController.text,
-              adress: _adressController.text,
-              department: _selectedDepartment!,
-              gender: _selectedGender!,
-              examination_hours: _examinationHoursController.text,
-              number_of_start: double.parse(_numberOfStart.text),
-            );
+            listDoctor[doctorIndex] = updatedDoctor;
             _filterDoctors(); // Cập nhật danh sách tìm kiếm
           });
         }
@@ -381,19 +396,19 @@ class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
     }
   }
 
-  void _editDoctor(DTODoctor doctor) {
+  void _editDoctor(Doctor doctor) {
     setState(() {
       _editingDoctorId = doctor.doctorId;
       _nameController.text = doctor.name;
-      _yearOfBirthController.text = doctor.year_Of_Birth.toString(); // Chuyển đổi sang String
+      _yearOfBirthController.text = doctor.yearOfBirth.toString(); // Chuyển đổi sang String
       _selectedDegree = doctor.degree;
       _emailController.text = doctor.email;
-      _phoneNumberController.text = doctor.phoneNumber;
-      _adressController.text = doctor.adress;
-      _selectedDepartment = doctor.department;
+      _phoneNumberController.text = doctor.phone;
+      _adressController.text = doctor.address;
+      _selectedDepartment = doctor.department.name;
       _selectedGender = doctor.gender;
-      _examinationHoursController.text = doctor.examination_hours;
-      _numberOfStart.text = doctor.number_of_start.toString(); // Chuyển đổi sang String
+      _examinationHoursController.text = "doctor.examination_hours";
+      _numberOfStart.text = doctor.numberOfStars.toString(); // Chuyển đổi sang String
     });
     _showDoctorForm();
   }
@@ -425,7 +440,7 @@ class _AdminDoctorScreenState extends State<AdminDoctorScreen> {
 
   void _deleteDoctor(int id) {
     setState(() {
-      doctors.removeWhere((doctor) => doctor.doctorId == id);
+      listDoctor.removeWhere((doctor) => doctor.doctorId == id);
       _filterDoctors(); // Cập nhật danh sách tìm kiếm
     });
   }

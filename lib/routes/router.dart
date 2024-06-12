@@ -5,6 +5,7 @@ import 'package:app_medicine/widgets/auth_check_widget.dart';
 import 'package:flutter/material.dart';
 import '../screens/AppointmentBookingScreen.dart';
 import '../screens/auth/login.dart';
+import '../screens/doctor/doctor_home.dart';
 import '../screens/doctor_detail.dart';
 import '../screens/user/home.dart';
 
@@ -16,4 +17,5 @@ Map<String, Widget Function(BuildContext)> routes = {
   '/login': (context) => const LoginScreen(),
   '/prescription': (context) => PrescriptionSearchTab(),
   '/AppointmentBooking' : (context) => AppointmentBookingScreen(),
+  '/doctor' : (context) => const DoctorHome(),
 };

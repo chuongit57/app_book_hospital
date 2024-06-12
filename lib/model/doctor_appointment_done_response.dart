@@ -13,9 +13,11 @@ class DoctorAppointmentDoneResponse {
   final User user;
   final dynamic description;
   final dynamic age;
+  final dynamic name;
   final dynamic weight;
   final dynamic height;
   final dynamic phone;
+  final dynamic gender;
 
   DoctorAppointmentDoneResponse({
     required this.id,
@@ -30,6 +32,8 @@ class DoctorAppointmentDoneResponse {
     required this.weight,
     required this.height,
     required this.phone,
+    required this.name,
+    required this.gender
   });
 
   factory DoctorAppointmentDoneResponse.fromJson(Map<String, dynamic> json) {
@@ -52,6 +56,8 @@ class DoctorAppointmentDoneResponse {
       weight: json['weight'],
       height: json['height'],
       phone: json['phone'],
+      name: json['name'],
+      gender: json['gender']
     );
   }
 

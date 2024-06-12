@@ -7,13 +7,17 @@ class AppConstant {
   static const String DEPARTMENT_GET_ALL = BASE_URL + "/app_doctor/api/department/all";
   static const String DEPARTMENT_SELECT = BASE_URL + "/app_doctor/api/department/select-department";
 
+  static const String BLOODGROUP_GET_ALL = BASE_URL + "/app_doctor/api/bloodgroup/all";
+
   static const String DOCTOR_LIST_DOCTOR_TOP = BASE_URL + "/app_doctor/api/doctor/top-5-doctor";
+  static const String DOCTOR_LIST = BASE_URL + "/app_doctor/api/doctor/doctors";
 
   static const String DOCTOR_APPOINTMENT_SIGN_UP = BASE_URL + "/app_doctor/api/doctor-appointment/sign-up";
   static const String DOCTOR_APPOINTMENT_DONE = BASE_URL + "/app_doctor/api/doctor-appointment/done";
 
   static const String USER_BOOK_BOOK = BASE_URL + "/app_doctor/api/user_book/book";
   static const String USER_BOOK_REMOVE_BOOK = BASE_URL + "/app_doctor/api/user_book/remove-book";
-
-  static const String BLOODGROUP_GET_ALL = BASE_URL + "/app_doctor/api/bloodgroup/get-all-bloodgroup";
+  static const String USER_BOOK_LIST_BOOK = BASE_URL + "/app_doctor/api/user_book/list-book";
+  static const String USER_BOOK_DOCTOR_COMPLETED = BASE_URL + "/app_doctor/api/user_book/doctor-completed-book";
+  static const String USER_BOOK_DOCTOR_CANCEL = BASE_URL + "/app_doctor/api/user_book/doctor-cancel-book";
 }

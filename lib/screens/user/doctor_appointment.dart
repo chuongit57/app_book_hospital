@@ -236,7 +236,7 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
                 ),
               ),
             ] else if (_status == ScheduleUserStatus.DONE) ...[
-              DoctorAppointmentDoneTab(),
+              const DoctorAppointmentDoneTab(),
             ] else if (_status == ScheduleUserStatus.HISTORY) ...[
             ],
 
@@ -255,10 +255,8 @@ class _DoctorAppointmentScreenState extends State<DoctorAppointmentScreen> {
           appointment: appointment, doctorAppointment: doctorAppointment,
           onSuccess: (appointmentId) {
             setState(() {
-              setState(() {
-                _status = ScheduleUserStatus.DONE;
-                _alignment = Alignment.center;
-              });
+              _status = ScheduleUserStatus.DONE;
+              _alignment = Alignment.center;
             });
           }
         );
